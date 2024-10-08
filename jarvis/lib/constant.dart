@@ -1,0 +1,1 @@
+const double drawerDisplayWidthThreshold = 800;
