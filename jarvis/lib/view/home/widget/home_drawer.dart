@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/home/home_screen.dart';
+import 'package:jarvis/view/profile/profile_screen.dart';
+import 'package:provider/provider.dart';
+import '../../auth/auth_screen.dart';
+import '../../shared/app_logo_with_name.dart';
+import '../notifier/drawer_notifier.dart';
 
 class HomeDrawer extends StatelessWidget {
   final bool isLargeScreen;
 
-  HomeDrawer({
+  const HomeDrawer({
     super.key,
     required this.isLargeScreen,
   });
 
-  final List<String> chatHistory = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Very longggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',
-    'Item 1',
-    'Item 1',
-    'Item 1',
-    'Item 1',
-    'Item 1',
-    'Item 1',
-    'Item 1',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final drawerNotifier = Provider.of<DrawerNotifier>(context);
+
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -33,19 +26,7 @@ class HomeDrawer extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5, top: 12),
               child: Row(
                 children: [
-                  Image.asset(
-                    'assets/logo.png',
-                    width: 48,
-                    height: 48,
-                  ),
-                  const Text(
-                    'Jarvis',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
+                  const AppLogoWithName(),
                   const Spacer(),
                   if (!isLargeScreen)
                     IconButton(
@@ -64,7 +45,21 @@ class HomeDrawer extends StatelessWidget {
                 'Chat',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              onTap: () {},
+              tileColor: drawerNotifier.value == 0
+                  ? (Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF303f52)
+                  : const Color(0xFFdce3f3))
+                  : null,
+              iconColor: drawerNotifier.value == 0 ? Colors.blue : null,
+              textColor: drawerNotifier.value == 0 ? Colors.blue : null,
+              onTap: () {
+                drawerNotifier.selectTab(0);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
@@ -72,12 +67,22 @@ class HomeDrawer extends StatelessWidget {
                 'Profile',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              onTap: () {},
-              tileColor: Theme.of(context).brightness == Brightness.dark
+              tileColor: drawerNotifier.value == 1
+                  ? (Theme.of(context).brightness == Brightness.dark
                   ? const Color(0xFF303f52)
-                  : const Color(0xFFdce3f3),
-              iconColor: Colors.blue,
-              textColor: Colors.blue,
+                  : const Color(0xFFdce3f3))
+                  : null,
+              iconColor: drawerNotifier.value == 1 ? Colors.blue : null,
+              textColor: drawerNotifier.value == 1 ? Colors.blue : null,
+              onTap: () {
+                drawerNotifier.selectTab(1);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const AuthScreen(),
+                    //builder: (context) => const ProfileScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.email),
@@ -85,20 +90,39 @@ class HomeDrawer extends StatelessWidget {
                 'Email',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              onTap: () {},
+              tileColor: drawerNotifier.value == 2
+                  ? (Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF303f52)
+                  : const Color(0xFFdce3f3))
+                  : null,
+              iconColor: drawerNotifier.value == 2 ? Colors.blue : null,
+              textColor: drawerNotifier.value == 2 ? Colors.blue : null,
+              onTap: () {
+                drawerNotifier.selectTab(2);
+              },
             ),
             const Divider(),
             Expanded(
               child: ListView.builder(
-                itemCount: chatHistory.length,
+                itemCount: 10,
                 itemBuilder: (context, index) {
+                  int listViewIndex = index + 3;
                   return ListTile(
                     title: Text(
-                      chatHistory[index],
+                      'Chat Item ${index + 1}',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    onTap: () {},
+                    tileColor: drawerNotifier.value == listViewIndex
+                        ? (Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF303f52)
+                        : const Color(0xFFdce3f3))
+                        : null,
+                    iconColor: drawerNotifier.value == listViewIndex ? Colors.blue : null,
+                    textColor: drawerNotifier.value == listViewIndex ? Colors.blue : null,
+                    onTap: () {
+                      drawerNotifier.selectTab(listViewIndex);
+                    },
                   );
                 },
               ),

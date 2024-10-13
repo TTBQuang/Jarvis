@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/home/notifier/drawer_notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => DrawerNotifier(0),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Jarvis',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent, brightness: Brightness.light),
         useMaterial3: true,
@@ -20,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.system, // Automatically switch between dark and light themes
+      themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }

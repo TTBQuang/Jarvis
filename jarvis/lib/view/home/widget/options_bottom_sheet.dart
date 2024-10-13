@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../constant.dart';
+import '../../prompt_library/prompt_library_bottom_sheet.dart';
+
 class OptionsBottomSheet extends StatelessWidget {
   const OptionsBottomSheet({super.key});
 
@@ -16,9 +19,10 @@ class OptionsBottomSheet extends StatelessWidget {
               'Upload Image',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.camera_alt),
@@ -26,9 +30,10 @@ class OptionsBottomSheet extends StatelessWidget {
               'Take Photo',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
@@ -37,12 +42,31 @@ class OptionsBottomSheet extends StatelessWidget {
               'Prompt Library',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).pop();
+              _showPromptLibraryBottomSheet(context);
             },
           ),
         ],
       ),
+    );
+  }
+
+  void _showPromptLibraryBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * maxBottomSheetHeightPercentage,
+          ),
+          child: const PromptLibraryBottomSheet(),
+        );
+      },
     );
   }
 }

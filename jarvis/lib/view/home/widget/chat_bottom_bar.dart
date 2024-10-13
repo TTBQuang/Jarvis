@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
 
-class ChatBottomBar extends StatelessWidget {
+class ChatBottomBar extends StatefulWidget {
   final void Function(BuildContext context) onAddIconBtnClicked;
 
   const ChatBottomBar({required this.onAddIconBtnClicked, super.key});
+
+  @override
+  State<StatefulWidget> createState() => _ChatBottomBarState();
+}
+
+class _ChatBottomBarState extends State<ChatBottomBar> {
+  final TextEditingController _textController = TextEditingController();
+  bool _isTextEmpty = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Listen to TextField changes
+    _textController.addListener(() {
+      setState(() {
+        _isTextEmpty = _textController.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +47,13 @@ class ChatBottomBar extends StatelessWidget {
           child: IconButton(
             iconSize: 20,
             icon: const Icon(Icons.add),
-            onPressed: () => onAddIconBtnClicked(context),
+            onPressed: () => widget.onAddIconBtnClicked(context),
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: TextField(
+            controller: _textController,
             decoration: InputDecoration(
               hintText: 'Type a message',
               contentPadding:
@@ -35,12 +62,12 @@ class ChatBottomBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onSubmitted: (value) {},
           ),
         ),
         IconButton(
           icon: const Icon(Icons.send),
-          onPressed: () {},
+          onPressed: _isTextEmpty ? null : () {},
+          color: _isTextEmpty ? Colors.grey : Colors.blue,
         ),
       ],
     );
