@@ -107,7 +107,10 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
                           value: item,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8),
-                            child: Text(item),
+                            child: Text(
+                              item,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         );
                       }).toList(),
