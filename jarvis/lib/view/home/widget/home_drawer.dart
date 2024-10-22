@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/view/home/home_screen.dart';
+import 'package:jarvis/view/personal/personal_screen.dart';
 import 'package:jarvis/view/profile/profile_screen.dart';
 import 'package:provider/provider.dart';
 import '../../auth/auth_screen.dart';
@@ -47,8 +48,8 @@ class HomeDrawer extends StatelessWidget {
               ),
               tileColor: drawerNotifier.value == 0
                   ? (Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF303f52)
-                  : const Color(0xFFdce3f3))
+                      ? const Color(0xFF303f52)
+                      : const Color(0xFFdce3f3))
                   : null,
               iconColor: drawerNotifier.value == 0 ? Colors.blue : null,
               textColor: drawerNotifier.value == 0 ? Colors.blue : null,
@@ -69,8 +70,8 @@ class HomeDrawer extends StatelessWidget {
               ),
               tileColor: drawerNotifier.value == 1
                   ? (Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF303f52)
-                  : const Color(0xFFdce3f3))
+                      ? const Color(0xFF303f52)
+                      : const Color(0xFFdce3f3))
                   : null,
               iconColor: drawerNotifier.value == 1 ? Colors.blue : null,
               textColor: drawerNotifier.value == 1 ? Colors.blue : null,
@@ -92,13 +93,35 @@ class HomeDrawer extends StatelessWidget {
               ),
               tileColor: drawerNotifier.value == 2
                   ? (Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF303f52)
-                  : const Color(0xFFdce3f3))
+                      ? const Color(0xFF303f52)
+                      : const Color(0xFFdce3f3))
                   : null,
               iconColor: drawerNotifier.value == 2 ? Colors.blue : null,
               textColor: drawerNotifier.value == 2 ? Colors.blue : null,
               onTap: () {
                 drawerNotifier.selectTab(2);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text(
+                'Personal',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              tileColor: drawerNotifier.value == 3
+                  ? (Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF303f52)
+                      : const Color(0xFFdce3f3))
+                  : null,
+              iconColor: drawerNotifier.value == 3 ? Colors.blue : null,
+              textColor: drawerNotifier.value == 3 ? Colors.blue : null,
+              onTap: () {
+                drawerNotifier.selectTab(3);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const PersonalScreen(),
+                  ),
+                );
               },
             ),
             const Divider(),
@@ -115,11 +138,15 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     tileColor: drawerNotifier.value == listViewIndex
                         ? (Theme.of(context).brightness == Brightness.dark
-                        ? const Color(0xFF303f52)
-                        : const Color(0xFFdce3f3))
+                            ? const Color(0xFF303f52)
+                            : const Color(0xFFdce3f3))
                         : null,
-                    iconColor: drawerNotifier.value == listViewIndex ? Colors.blue : null,
-                    textColor: drawerNotifier.value == listViewIndex ? Colors.blue : null,
+                    iconColor: drawerNotifier.value == listViewIndex
+                        ? Colors.blue
+                        : null,
+                    textColor: drawerNotifier.value == listViewIndex
+                        ? Colors.blue
+                        : null,
                     onTap: () {
                       drawerNotifier.selectTab(listViewIndex);
                     },
