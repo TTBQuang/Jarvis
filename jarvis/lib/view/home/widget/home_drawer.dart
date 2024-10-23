@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/email/email_screen.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 import 'package:jarvis/view/personal/personal_screen.dart';
 import 'package:jarvis/view/profile/profile_screen.dart';
@@ -79,8 +80,8 @@ class HomeDrawer extends StatelessWidget {
                 drawerNotifier.selectTab(1);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => const AuthScreen(),
-                    //builder: (context) => const ProfileScreen(),
+                    // builder: (context) => const AuthScreen(),
+                    builder: (context) => const ProfileScreen(),
                   ),
                 );
               },
@@ -100,6 +101,11 @@ class HomeDrawer extends StatelessWidget {
               textColor: drawerNotifier.value == 2 ? Colors.blue : null,
               onTap: () {
                 drawerNotifier.selectTab(2);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const EmailScreen(),
+                  ),
+                );
               },
             ),
             ListTile(

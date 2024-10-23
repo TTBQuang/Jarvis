@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/pricing/pricing_screen.dart';
 import 'package:jarvis/view/shared/token_display.dart';
 
 import '../../constant.dart';
@@ -84,7 +85,12 @@ class ProfileScreen extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => PricingScreen()),
+                      );
+                    },
                   ),
                   const Divider(),
                   ListTile(
