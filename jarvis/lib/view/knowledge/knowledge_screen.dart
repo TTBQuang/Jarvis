@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/view/knowledge/knowledge_detail_screen.dart';
 import 'package:jarvis/view/knowledge/widget/create_knowledge_dialog.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -99,6 +100,13 @@ class KnowledgeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                      onRowTap: (index) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => KnowledgeDetailScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
