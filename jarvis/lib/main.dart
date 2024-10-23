@@ -35,7 +35,11 @@ class MyApp extends StatelessWidget {
       },
       themeMode: ThemeMode.system,
       builder: (context, child) {
-        return FTheme(data: FThemes.blue.light, child: child!);
+        return FTheme(
+            data: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? FThemes.blue.dark
+                : FThemes.blue.light,
+            child: child!);
       },
       home: const HomeScreen(),
     );

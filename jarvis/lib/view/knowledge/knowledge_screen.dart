@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/view/knowledge/widget/create_knowledge_dialog.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 const knowledges = [
@@ -39,7 +40,10 @@ class KnowledgeScreen extends StatelessWidget {
                 width: 200,
                 child: FButton(
                   label: const Text('Create Knowledge'),
-                  onPress: () {},
+                  onPress: () => showAdaptiveDialog(
+                    context: context,
+                    builder: (context) => CreateKnowledgeDialog(),
+                  ),
                 ),
               ),
             ),
