@@ -35,34 +35,39 @@ class KnowledgeScreen extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 200,
-                child: FButton(
-                  label: const Text('Create Knowledge'),
-                  onPress: () => showAdaptiveDialog(
-                    context: context,
-                    builder: (context) => CreateKnowledgeDialog(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(4.0),
+                  child: SizedBox(
+                    width: 200,
+                    child: ShadInput(
+                      placeholder: Text('Search'),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(4.0),
-              child: SizedBox(
-                width: 200,
-                child: ShadInput(
-                  placeholder: Text('Search'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 200,
+                    child: FButton(
+                      label: const Text('Create Knowledge'),
+                      onPress: () => showAdaptiveDialog(
+                        context: context,
+                        builder: (context) => CreateKnowledgeDialog(),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             Expanded(
+              flex: 1,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(),
+                  child: Expanded(
                     child: ShadTable.list(
                       header: const [
                         ShadTableCell.header(child: Text('Knowledge')),

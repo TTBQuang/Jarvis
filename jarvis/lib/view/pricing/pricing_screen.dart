@@ -64,17 +64,26 @@ class PricingScreen extends StatelessWidget {
                   FDivider(),
                   Text(
                     'Pricing',
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 20),
                   Text('Jarvis - Best AI Assistant Powered by GPT',
-                      style: TextStyle(fontSize: 26)),
-                  Text(
-                    'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
-                    textAlign: TextAlign.center,
-                  ),
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary)),
+                  SizedBox(height: 20),
+                  SizedBox(
+                      width: 450,
+                      child: Text(
+                        'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
+                        textAlign: TextAlign.center,
+                      )),
+                  SizedBox(height: 30),
                   Expanded(
                     child: GridView.count(
                         crossAxisCount: isLargeScreen ? 3 : 1,
+                        crossAxisSpacing: 20,
                         children: [
                           Card(
                             child: Padding(
@@ -85,10 +94,26 @@ class PricingScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FIcon(FAssets.icons.sun),
-                                      Text('Basic'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('Basic',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
                                     ],
                                   ),
-                                  Text('Free'),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text('Free',
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary)),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -102,10 +127,50 @@ class PricingScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FIcon(FAssets.icons.infinity),
-                                      Text('Starter'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('Starter',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
                                     ],
                                   ),
-                                  Text('1-month Free Trial'),
+                                  Expanded(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text('1-month Free Trial',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary)),
+                                          Text('Then',
+                                              style: TextStyle(
+                                                  color: Colors.grey)),
+                                          Text('\$9.99/month',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey)),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SizedBox(
+                                              width: 200,
+                                              child: FButton(
+                                                label:
+                                                    const Text('Subscribe Now'),
+                                                onPress: () {},
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -119,10 +184,50 @@ class PricingScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FIcon(FAssets.icons.crown),
-                                      Text('Pro Annually'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('Pro Annually',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
                                     ],
                                   ),
-                                  Text('1-month Free Trial'),
+                                  Expanded(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text('1-month Free Trial',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary)),
+                                          Text('Then',
+                                              style: TextStyle(
+                                                  color: Colors.grey)),
+                                          Text('\$79.99/year',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey)),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SizedBox(
+                                              width: 200,
+                                              child: FButton(
+                                                label:
+                                                    const Text('Subscribe Now'),
+                                                onPress: () {},
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

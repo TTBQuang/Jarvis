@@ -40,42 +40,47 @@ class BotsScreen extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 200,
-                child: FButton(
-                  label: const Text('Create Bot'),
-                  onPress: () => showAdaptiveDialog(
-                    context: context,
-                    builder: (context) => CreateBotDialog(),
-                  ),
-                ),
-              ),
-            ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 180),
-                    child: ShadSelect<String>(
-                      placeholder: const Text('Select a type'),
-                      initialValue: 'all',
-                      options: botTypes.entries.map((e) =>
-                          ShadOption(value: e.key, child: Text(e.value))),
-                      selectedOptionBuilder: (context, value) =>
-                          Text(botTypes[value]!),
-                      onChanged: print,
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 180),
+                        child: ShadSelect<String>(
+                          placeholder: const Text('Select a type'),
+                          initialValue: 'all',
+                          options: botTypes.entries.map((e) =>
+                              ShadOption(value: e.key, child: Text(e.value))),
+                          selectedOptionBuilder: (context, value) =>
+                              Text(botTypes[value]!),
+                          onChanged: print,
+                        ),
+                      ),
                     ),
-                  ),
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: SizedBox(
+                        width: 200,
+                        child: ShadInput(
+                          placeholder: Text('Search'),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(4.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: 200,
-                    child: ShadInput(
-                      placeholder: Text('Search'),
+                    child: FButton(
+                      label: const Text('Create Bot'),
+                      onPress: () => showAdaptiveDialog(
+                        context: context,
+                        builder: (context) => CreateBotDialog(),
+                      ),
                     ),
                   ),
                 ),
@@ -93,6 +98,7 @@ class BotsScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   mainAxisSpacing: 8.0,
                   crossAxisSpacing: 8.0,
+                  childAspectRatio: 3 / 1,
                 ),
               ),
             ),

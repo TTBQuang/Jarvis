@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 
+enum UnitType {
+  localFile,
+  website,
+  githubRepository,
+  gitlabRepository,
+  googleDrive
+}
+
 class AddUnitDialog extends StatefulWidget {
   const AddUnitDialog({super.key});
 
@@ -16,29 +24,39 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     return FDialog(
       direction: Axis.horizontal,
       title: const Text('Add New Unit'),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SizedBox(height: 10),
-            FTextField(
-              controller: TextEditingController(), // TextEditingController
-              label: const Text('Unit Name'),
-              hint: 'Enter unit name',
-              maxLines: 1,
-              maxLength: 50,
-            ),
-            SizedBox(height: 10),
-            FTextField.multiline(
-              controller: TextEditingController(), // TextEditingController
-              label: const Text('Unit Description'),
-              hint: 'Enter unit description',
-              maxLines: 4,
-              maxLength: 2000,
-            ),
-            SizedBox(height: 10),
-          ],
+      body: SizedBox(
+        width: double.maxFinite,
+        height: 200,
+        child: Material(
+          child: ListView(
+            children: <Widget>[
+              RadioListTile(
+                  value: UnitType.localFile,
+                  groupValue: UnitType.localFile,
+                  onChanged: null,
+                  title: const Text('Local File')),
+              RadioListTile(
+                  value: UnitType.website,
+                  groupValue: UnitType.localFile,
+                  onChanged: null,
+                  title: const Text('Website')),
+              RadioListTile(
+                  value: UnitType.githubRepository,
+                  groupValue: UnitType.localFile,
+                  onChanged: null,
+                  title: const Text('Github Repository')),
+              RadioListTile(
+                  value: UnitType.gitlabRepository,
+                  groupValue: UnitType.localFile,
+                  onChanged: null,
+                  title: const Text('Gitlab Repository')),
+              RadioListTile(
+                  value: UnitType.googleDrive,
+                  groupValue: UnitType.localFile,
+                  onChanged: null,
+                  title: const Text('Google Drive')),
+            ],
+          ),
         ),
       ),
       actions: [
