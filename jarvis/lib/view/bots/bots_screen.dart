@@ -52,7 +52,7 @@ class BotsScreen extends StatelessWidget {
                   direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.only(right: 16),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minWidth: 180),
                         child: ShadSelect<String>(
@@ -67,7 +67,7 @@ class BotsScreen extends StatelessWidget {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: EdgeInsets.only(left: 8),
                       child: SizedBox(
                         width: 200,
                         child: FTextField(

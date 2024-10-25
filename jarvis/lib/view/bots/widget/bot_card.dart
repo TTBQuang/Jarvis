@@ -11,43 +11,48 @@ class BotCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 20),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 100),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue[50]!),
-            borderRadius: BorderRadius.circular(8),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 100),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue[50]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            child: FIcon(FAssets.icons.bot),
           ),
-          child: ListTile(
-            leading: CircleAvatar(
-              child: FIcon(FAssets.icons.bot),
-            ),
-            title: Text(bot.name),
-            subtitle: Row(
-              children: [
-                const Icon(Icons.access_time, size: 16),
-                const SizedBox(width: 5),
-                Text(bot.createdAt),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.star_border),
-                  onPressed: () {
-                    // Handle favorite action
-                  },
+          title: Text(
+            bot.name,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Row(
+            children: [
+              const Icon(Icons.access_time, size: 16),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  bot.createdAt,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    // Handle delete action
-                  },
-                ),
-              ],
-            ),
+              )
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.star_border),
+                onPressed: () {
+                  // Handle favorite action
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  // Handle delete action
+                },
+              ),
+            ],
           ),
         ),
       ),
