@@ -56,7 +56,7 @@ class _PublicPromptItemState extends State<PublicPromptItem> {
             maxHeight: MediaQuery.of(context).size.height *
                 maxBottomSheetHeightPercentage,
           ),
-          child: SendPromptBottomSheet(),
+          child: const SendPromptBottomSheet(),
         );
       },
     );
