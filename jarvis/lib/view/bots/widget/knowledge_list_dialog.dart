@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/view/bots/widget/add_knowledge_dialog.dart';
 import 'package:jarvis/view/knowledge/widget/create_knowledge_dialog.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class KnowledgeListDialog extends StatefulWidget {
   const KnowledgeListDialog({super.key});
@@ -12,10 +11,6 @@ class KnowledgeListDialog extends StatefulWidget {
 }
 
 class _KnowledgeListDialogState extends State<KnowledgeListDialog> {
-  final _formKey = GlobalKey<FormState>();
-  String knowledgeName = '';
-  String knowledgeDescription = '';
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -29,7 +24,7 @@ class _KnowledgeListDialogState extends State<KnowledgeListDialog> {
               icon: const Icon(Icons.add),
               onPressed: () => showAdaptiveDialog(
                 context: context,
-                builder: (context) => AddKnowledgeDialog(),
+                builder: (context) => const AddKnowledgeDialog(),
               ),
             ),
           ],
@@ -41,13 +36,13 @@ class _KnowledgeListDialogState extends State<KnowledgeListDialog> {
             child: ListView(
               children: [
                 ListTile(
-                  title: Text('Knowledge 1'),
-                  subtitle: Text('Description 1'),
+                  title: const Text('Knowledge 1'),
+                  subtitle: const Text('Description 1'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () => showAdaptiveDialog(
                       context: context,
-                      builder: (context) => CreateKnowledgeDialog(),
+                      builder: (context) => const CreateKnowledgeDialog(),
                     ),
                   ),
                 ),
@@ -56,10 +51,15 @@ class _KnowledgeListDialogState extends State<KnowledgeListDialog> {
           ),
         ),
         actions: [
-          FButton(
-              style: FButtonStyle.outline,
-              label: const Text('Cancel'),
-              onPress: () => Navigator.of(context).pop()),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
         ],
       ),
     );

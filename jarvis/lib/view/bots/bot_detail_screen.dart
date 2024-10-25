@@ -8,6 +8,7 @@ import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/shared/app_logo_with_name.dart';
+import 'package:jarvis/view/shared/my_scaffold.dart';
 import 'package:jarvis/view/shared/token_display.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -43,7 +44,8 @@ class BotDetailScreen extends StatelessWidget {
                   : FThemes.blue.light,
               child: child!);
         },
-        home: Scaffold(
+        home: MyScaffold(
+          isLargeScreen: isLargeScreen,
           appBar: AppBar(
             centerTitle: true,
             forceMaterialTransparency: true,

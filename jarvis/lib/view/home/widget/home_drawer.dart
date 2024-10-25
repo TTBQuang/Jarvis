@@ -109,7 +109,7 @@ class HomeDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.account_circle),
+              leading: const Icon(Icons.work),
               title: const Text(
                 'Personal',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -135,7 +135,7 @@ class HomeDrawer extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  int listViewIndex = index + 3;
+                  int listViewIndex = index + 4;
                   return ListTile(
                     title: Text(
                       'Chat Item ${index + 1}',

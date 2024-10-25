@@ -12,8 +12,13 @@ class BotCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 20),
-        child: FCard(
+        constraints: const BoxConstraints(maxHeight: 20),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 100),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blue[50]!),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: ListTile(
             leading: CircleAvatar(
               child: FIcon(FAssets.icons.bot),
@@ -21,8 +26,8 @@ class BotCard extends StatelessWidget {
             title: Text(bot.name),
             subtitle: Row(
               children: [
-                Icon(Icons.access_time, size: 16),
-                SizedBox(width: 5),
+                const Icon(Icons.access_time, size: 16),
+                const SizedBox(width: 5),
                 Text(bot.createdAt),
               ],
             ),
@@ -30,13 +35,13 @@ class BotCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.star_border),
+                  icon: const Icon(Icons.star_border),
                   onPressed: () {
                     // Handle favorite action
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
                     // Handle delete action
                   },

@@ -17,8 +17,6 @@ class AddUnitDialog extends StatefulWidget {
 }
 
 class _AddUnitDialogState extends State<AddUnitDialog> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return FDialog(
@@ -29,32 +27,32 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         height: 200,
         child: Material(
           child: ListView(
-            children: <Widget>[
+            children: const <Widget>[
               RadioListTile(
                   value: UnitType.localFile,
                   groupValue: UnitType.localFile,
                   onChanged: null,
-                  title: const Text('Local File')),
+                  title: Text('Local File')),
               RadioListTile(
                   value: UnitType.website,
                   groupValue: UnitType.localFile,
                   onChanged: null,
-                  title: const Text('Website')),
+                  title: Text('Website')),
               RadioListTile(
                   value: UnitType.githubRepository,
                   groupValue: UnitType.localFile,
                   onChanged: null,
-                  title: const Text('Github Repository')),
+                  title: Text('Github Repository')),
               RadioListTile(
                   value: UnitType.gitlabRepository,
                   groupValue: UnitType.localFile,
                   onChanged: null,
-                  title: const Text('Gitlab Repository')),
+                  title: Text('Gitlab Repository')),
               RadioListTile(
                   value: UnitType.googleDrive,
                   groupValue: UnitType.localFile,
                   onChanged: null,
-                  title: const Text('Google Drive')),
+                  title: Text('Google Drive')),
             ],
           ),
         ),

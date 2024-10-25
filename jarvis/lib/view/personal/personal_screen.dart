@@ -42,39 +42,42 @@ class PersonalScreen extends StatelessWidget {
               ],
             ),
           ),
-          body: FTabs(
-            tabs: [
-              FTabEntry(
-                label: SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FIcon(FAssets.icons.bot),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('Bots'),
-                      ),
-                    ],
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: FTabs(
+              tabs: [
+                FTabEntry(
+                  label: SizedBox(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FIcon(FAssets.icons.bot),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('Bots'),
+                        ),
+                      ],
+                    ),
                   ),
+                  content: const BotsScreen(),
                 ),
-                content: const BotsScreen(),
-              ),
-              FTabEntry(
-                label: SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FIcon(FAssets.icons.tableProperties),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('Knowledge'),
-                      ),
-                    ],
+                FTabEntry(
+                  label: SizedBox(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FIcon(FAssets.icons.tableProperties),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('Knowledge'),
+                        ),
+                      ],
+                    ),
                   ),
+                  content: const KnowledgeScreen(),
                 ),
-                content: const KnowledgeScreen(),
-              ),
-            ],
+              ],
+            ),
           ),
           isLargeScreen: isLargeScreen,
         );

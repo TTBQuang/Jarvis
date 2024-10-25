@@ -74,7 +74,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
                     label: const Text('Add Unit'),
                     onPress: () => showAdaptiveDialog(
                       context: context,
-                      builder: (context) => AddUnitDialog(),
+                      builder: (context) => const AddUnitDialog(),
                     ),
                   ),
                 ),
@@ -96,12 +96,14 @@ class KnowledgeDetailScreen extends StatelessWidget {
                           ShadTableCell.header(
                             child: Text('Latest Update'),
                           ),
-                          ShadTableCell(child: Text('Enable')),
+                          ShadTableCell.header(
+                            child: Text('Enable'),
+                          ),
                           ShadTableCell.header(
                             child: Text('Action'),
                           )
                         ],
-                        children: [
+                        children: const [
                           [
                             ShadTableCell(child: Text('')),
                             ShadTableCell(child: Text('')),

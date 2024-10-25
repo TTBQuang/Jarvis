@@ -24,7 +24,7 @@ class _CreateKnowledgeDialogState extends State<CreateKnowledgeDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               FTextField(
                 controller: TextEditingController(), // TextEditingController
                 label: const Text('Knowledge Name'),
@@ -32,7 +32,7 @@ class _CreateKnowledgeDialogState extends State<CreateKnowledgeDialog> {
                 maxLines: 1,
                 maxLength: 50,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               FTextField.multiline(
                 controller: TextEditingController(), // TextEditingController
                 label: const Text('Knowledge Description'),
@@ -40,18 +40,34 @@ class _CreateKnowledgeDialogState extends State<CreateKnowledgeDialog> {
                 maxLines: 4,
                 maxLength: 2000,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),
         actions: [
-          FButton(
-              style: FButtonStyle.outline,
-              label: const Text('Cancel'),
-              onPress: () => Navigator.of(context).pop()),
-          FButton(
-              label: const Text('Confirm'),
-              onPress: () => Navigator.of(context).pop()),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Confirm',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
         ],
       ),
     );

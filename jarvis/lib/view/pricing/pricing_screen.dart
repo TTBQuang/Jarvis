@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/constant.dart';
-import 'package:jarvis/model/bot.dart';
-import 'package:jarvis/view/bots/widget/add_knowledge_dialog.dart';
-import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
-import 'package:jarvis/view/home/widget/messages_list.dart';
-import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
-import 'package:jarvis/view/shared/app_logo_with_name.dart';
-import 'package:jarvis/view/shared/token_display.dart';
+import 'package:jarvis/view/shared/my_scaffold.dart';
+import 'package:jarvis/view/shared/top_app_bar_with_drawer_icon.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class PricingScreen extends StatelessWidget {
@@ -40,18 +35,8 @@ class PricingScreen extends StatelessWidget {
                   : FThemes.blue.light,
               child: child!);
         },
-        home: Scaffold(
-          appBar: AppBar(
-            forceMaterialTransparency: true,
-            title: const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AppLogoWithName(),
-                ),
-              ],
-            ),
-          ),
+        home: MyScaffold(
+          appBar: TopAppBarWithDrawerIcon(isLargeScreen: isLargeScreen),
           body: Center(
             child: Container(
               constraints: BoxConstraints(
@@ -61,28 +46,33 @@ class PricingScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  FDivider(),
-                  Text(
-                    'Pricing',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-                  Text('Jarvis - Best AI Assistant Powered by GPT',
+                  if (isLargeScreen)
+                    Text(
+                      'Jarvis - Best AI Assistant Powered by GPT',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary)),
-                  isLargeScreen ? SizedBox(height: 20) : SizedBox(height: 10),
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                   isLargeScreen
-                      ? SizedBox(
-                          width: 450,
+                      ? const SizedBox(height: 20)
+                      : const SizedBox.shrink(),
+                  isLargeScreen
+                      ? const Text(
+                          'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
+                          textAlign: TextAlign.center,
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
                           child: Text(
-                            'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
+                            'Upgrade plan now for a seamless, user-friendly experience.',
+                            style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.center,
-                          ))
-                      : SizedBox(),
-                  SizedBox(height: 30),
+                          ),
+                        ),
+                  if (isLargeScreen) const SizedBox(height: 30),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -94,7 +84,7 @@ class PricingScreen extends StatelessWidget {
                           children: [
                             Card(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Row(
@@ -102,8 +92,8 @@ class PricingScreen extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         FIcon(FAssets.icons.sun),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
                                           child: Text('Basic',
                                               style: TextStyle(
                                                   fontSize: 22,
@@ -128,7 +118,7 @@ class PricingScreen extends StatelessWidget {
                             ),
                             Card(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Row(
@@ -136,12 +126,14 @@ class PricingScreen extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         FIcon(FAssets.icons.infinity),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('Starter',
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold)),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Starter',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -151,20 +143,24 @@ class PricingScreen extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text('1-month Free Trial',
-                                                style: TextStyle(
-                                                    fontSize: 22,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary)),
-                                            Text('Then',
+                                            Text(
+                                              '1-month Free Trial',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary),
+                                            ),
+                                            const Text('Then',
                                                 style: TextStyle(
                                                     color: Colors.grey)),
-                                            Text('\$9.99/month',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey)),
+                                            const Text(
+                                              '\$9.99/month',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey),
+                                            ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
@@ -187,7 +183,7 @@ class PricingScreen extends StatelessWidget {
                             ),
                             Card(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Row(
@@ -195,8 +191,8 @@ class PricingScreen extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         FIcon(FAssets.icons.crown),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
                                           child: Text('Pro Annually',
                                               style: TextStyle(
                                                   fontSize: 22,
@@ -217,10 +213,10 @@ class PricingScreen extends StatelessWidget {
                                                     color: Theme.of(context)
                                                         .colorScheme
                                                         .primary)),
-                                            Text('Then',
+                                            const Text('Then',
                                                 style: TextStyle(
                                                     color: Colors.grey)),
-                                            Text('\$79.99/year',
+                                            const Text('\$79.99/year',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey)),
@@ -251,6 +247,7 @@ class PricingScreen extends StatelessWidget {
               ),
             ),
           ),
+          isLargeScreen: isLargeScreen,
         ),
       );
     });
