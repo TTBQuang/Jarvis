@@ -36,75 +36,86 @@ class BotsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(builder: (context, constraints) {
+        bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
+        return Expanded(
+          child: Scaffold(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                Flex(
+                  direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: isLargeScreen
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(minWidth: 180),
-                        child: ShadSelect<String>(
-                          placeholder: const Text('Select a type'),
-                          initialValue: 'all',
-                          options: botTypes.entries.map((e) =>
-                              ShadOption(value: e.key, child: Text(e.value))),
-                          selectedOptionBuilder: (context, value) =>
-                              Text(botTypes[value]!),
-                          onChanged: print,
+                    Flex(
+                      direction:
+                          isLargeScreen ? Axis.horizontal : Axis.vertical,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 180),
+                            child: ShadSelect<String>(
+                              placeholder: const Text('Select a type'),
+                              initialValue: 'all',
+                              options: botTypes.entries.map((e) => ShadOption(
+                                  value: e.key, child: Text(e.value))),
+                              selectedOptionBuilder: (context, value) =>
+                                  Text(botTypes[value]!),
+                              onChanged: print,
+                            ),
+                          ),
                         ),
-                      ),
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: SizedBox(
+                            width: 200,
+                            child: ShadInput(
+                              placeholder: Text('Search'),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(4.0),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
                         width: 200,
-                        child: ShadInput(
-                          placeholder: Text('Search'),
+                        child: FButton(
+                          label: const Text('Create Bot'),
+                          onPress: () => showAdaptiveDialog(
+                            context: context,
+                            builder: (context) => CreateBotDialog(),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 200,
-                    child: FButton(
-                      label: const Text('Create Bot'),
-                      onPress: () => showAdaptiveDialog(
-                        context: context,
-                        builder: (context) => CreateBotDialog(),
-                      ),
+                Expanded(
+                  child: Center(
+                    child: GridView.count(
+                      crossAxisCount: MediaQuery.sizeOf(context).width >
+                              drawerDisplayWidthThreshold
+                          ? 2
+                          : 1,
+                      children: List.generate(
+                          bots.length, (index) => BotCard(bot: bots[index])),
+                      padding: const EdgeInsets.all(8.0),
+                      mainAxisSpacing: 8.0,
+                      crossAxisSpacing: 8.0,
+                      childAspectRatio: 3 / 1,
                     ),
                   ),
                 ),
               ],
             ),
-            Expanded(
-              child: Center(
-                child: GridView.count(
-                  crossAxisCount: MediaQuery.sizeOf(context).width >
-                          drawerDisplayWidthThreshold
-                      ? 2
-                      : 1,
-                  children: List.generate(
-                      bots.length, (index) => BotCard(bot: bots[index])),
-                  padding: const EdgeInsets.all(8.0),
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
-                  childAspectRatio: 3 / 1,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

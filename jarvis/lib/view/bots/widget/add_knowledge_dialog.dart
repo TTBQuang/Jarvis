@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/constant.dart';
 import 'package:jarvis/view/knowledge/widget/create_knowledge_dialog.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -17,41 +18,45 @@ class _AddKnowledgeDialogState extends State<AddKnowledgeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FDialog(
-      direction: Axis.horizontal,
-      title: const Text('Select Knowledge'),
-      body: Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(4.0),
-            child: SizedBox(
-              width: 200,
-              child: ShadInput(
-                placeholder: Text('Search'),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: 200,
-              child: FButton(
-                label: const Text('Create Knowledge'),
-                onPress: () => showAdaptiveDialog(
-                  context: context,
-                  builder: (context) => CreateKnowledgeDialog(),
+    return LayoutBuilder(builder: (context, constraints) {
+      bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
+      return FDialog(
+        direction: Axis.horizontal,
+        title: const Text('Select Knowledge'),
+        body: Flex(
+          direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: SizedBox(
+                width: 200,
+                child: ShadInput(
+                  placeholder: Text('Search'),
                 ),
               ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 200,
+                child: FButton(
+                  label: const Text('Create Knowledge'),
+                  onPress: () => showAdaptiveDialog(
+                    context: context,
+                    builder: (context) => CreateKnowledgeDialog(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          FButton(
+              style: FButtonStyle.outline,
+              label: const Text('Cancel'),
+              onPress: () => Navigator.of(context).pop()),
         ],
-      ),
-      actions: [
-        FButton(
-            style: FButtonStyle.outline,
-            label: const Text('Cancel'),
-            onPress: () => Navigator.of(context).pop()),
-      ],
-    );
+      );
+    });
   }
 }

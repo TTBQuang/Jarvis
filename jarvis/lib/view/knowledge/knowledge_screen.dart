@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/constant.dart';
 import 'package:jarvis/view/knowledge/knowledge_detail_screen.dart';
 import 'package:jarvis/view/knowledge/widget/create_knowledge_dialog.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -31,95 +32,104 @@ class KnowledgeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(builder: (context, constraints) {
+        bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
+        return Expanded(
+          child: Scaffold(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: SizedBox(
-                    width: 200,
-                    child: ShadInput(
-                      placeholder: Text('Search'),
+                Flex(
+                  direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: isLargeScreen
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: SizedBox(
+                        width: 200,
+                        child: ShadInput(
+                          placeholder: Text('Search'),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 200,
+                        child: FButton(
+                          label: const Text('Create Knowledge'),
+                          onPress: () => showAdaptiveDialog(
+                            context: context,
+                            builder: (context) => CreateKnowledgeDialog(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 200,
-                    child: FButton(
-                      label: const Text('Create Knowledge'),
-                      onPress: () => showAdaptiveDialog(
-                        context: context,
-                        builder: (context) => CreateKnowledgeDialog(),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Expanded(
+                        child: ShadTable.list(
+                          header: const [
+                            ShadTableCell.header(child: Text('Knowledge')),
+                            ShadTableCell.header(child: Text('Units')),
+                            ShadTableCell.header(child: Text('Size')),
+                            ShadTableCell.header(
+                              child: Text('Edit time'),
+                            ),
+                            ShadTableCell.header(
+                              child: Text('Action'),
+                            )
+                          ],
+                          children: knowledges.map(
+                            (knowledge) => [
+                              ShadTableCell(
+                                child: Text(
+                                  knowledge.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              ShadTableCell(child: Text(knowledge.units)),
+                              ShadTableCell(
+                                child: Text(
+                                  knowledge.size,
+                                ),
+                              ),
+                              ShadTableCell(child: Text(knowledge.editTime)),
+                              ShadTableCell(
+                                child: FIcon(
+                                  FAssets.icons.trash,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onRowTap: (index) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => KnowledgeDetailScreen(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Expanded(
-                    child: ShadTable.list(
-                      header: const [
-                        ShadTableCell.header(child: Text('Knowledge')),
-                        ShadTableCell.header(child: Text('Units')),
-                        ShadTableCell.header(child: Text('Size')),
-                        ShadTableCell.header(
-                          child: Text('Edit time'),
-                        ),
-                        ShadTableCell.header(
-                          child: Text('Action'),
-                        )
-                      ],
-                      children: knowledges.map(
-                        (knowledge) => [
-                          ShadTableCell(
-                            child: Text(
-                              knowledge.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          ShadTableCell(child: Text(knowledge.units)),
-                          ShadTableCell(
-                            child: Text(
-                              knowledge.size,
-                            ),
-                          ),
-                          ShadTableCell(child: Text(knowledge.editTime)),
-                          ShadTableCell(
-                            child: FIcon(
-                              FAssets.icons.trash,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onRowTap: (index) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => KnowledgeDetailScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

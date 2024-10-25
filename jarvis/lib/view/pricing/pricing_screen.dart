@@ -68,171 +68,184 @@ class PricingScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text('Jarvis - Best AI Assistant Powered by GPT',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary)),
-                  SizedBox(height: 20),
-                  SizedBox(
-                      width: 450,
-                      child: Text(
-                        'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
-                        textAlign: TextAlign.center,
-                      )),
+                  isLargeScreen ? SizedBox(height: 20) : SizedBox(height: 10),
+                  isLargeScreen
+                      ? SizedBox(
+                          width: 450,
+                          child: Text(
+                            'Upgrade plan now for a seamless, user-friendly experience. Unlock the full potential of our app and enjoy convenience at your fingertips.',
+                            textAlign: TextAlign.center,
+                          ))
+                      : SizedBox(),
                   SizedBox(height: 30),
                   Expanded(
-                    child: GridView.count(
-                        crossAxisCount: isLargeScreen ? 3 : 1,
-                        crossAxisSpacing: 20,
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FIcon(FAssets.icons.sun),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Basic',
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text('Free',
-                                          style: TextStyle(
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FIcon(FAssets.icons.infinity),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Starter',
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('1-month Free Trial',
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: isLargeScreen ? 0 : 50),
+                      child: GridView.count(
+                          crossAxisCount: isLargeScreen ? 3 : 1,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: isLargeScreen ? 1 : 0.7,
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        FIcon(FAssets.icons.sun),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Basic',
                                               style: TextStyle(
                                                   fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                          Text('Then',
-                                              style: TextStyle(
-                                                  color: Colors.grey)),
-                                          Text('\$9.99/month',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey)),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SizedBox(
-                                              width: 200,
-                                              child: FButton(
-                                                label:
-                                                    const Text('Subscribe Now'),
-                                                onPress: () {},
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FIcon(FAssets.icons.crown),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Pro Annually',
+                                    Expanded(
+                                      child: Center(
+                                        child: Text('Free',
                                             style: TextStyle(
                                                 fontSize: 22,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('1-month Free Trial',
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                          Text('Then',
-                                              style: TextStyle(
-                                                  color: Colors.grey)),
-                                          Text('\$79.99/year',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey)),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SizedBox(
-                                              width: 200,
-                                              child: FButton(
-                                                label:
-                                                    const Text('Subscribe Now'),
-                                                onPress: () {},
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary)),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ]),
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        FIcon(FAssets.icons.infinity),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Starter',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text('1-month Free Trial',
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                            Text('Then',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                            Text('\$9.99/month',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.grey)),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: 200,
+                                                child: FButton(
+                                                  label: const Text(
+                                                      'Subscribe Now'),
+                                                  onPress: () {},
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        FIcon(FAssets.icons.crown),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Pro Annually',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text('1-month Free Trial',
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                            Text('Then',
+                                                style: TextStyle(
+                                                    color: Colors.grey)),
+                                            Text('\$79.99/year',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.grey)),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: 200,
+                                                child: FButton(
+                                                  label: const Text(
+                                                      'Subscribe Now'),
+                                                  onPress: () {},
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ]),
+                    ),
                   )
                 ],
               ),

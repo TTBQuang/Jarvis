@@ -3,6 +3,7 @@ import 'package:forui/forui.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view/bots/widget/add_knowledge_dialog.dart';
+import 'package:jarvis/view/bots/widget/knowledge_list_dialog.dart';
 import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
@@ -80,12 +81,12 @@ class BotDetailScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      width: 250,
+                      width: 300,
                       child: FButton(
-                        label: const Text('Add Knowledge to Bot'),
+                        label: const Text('Knowledge List'),
                         onPress: () => showAdaptiveDialog(
                           context: context,
-                          builder: (context) => AddKnowledgeDialog(),
+                          builder: (context) => KnowledgeListDialog(),
                         ),
                       ),
                     ),

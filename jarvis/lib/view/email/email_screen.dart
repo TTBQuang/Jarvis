@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/email/widget/quick_reply_chips.dart';
 import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/home/widget/home_top_app_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
@@ -33,6 +34,8 @@ class EmailScreen extends StatelessWidget {
                       child: MessagesList(isLargeScreen: isLargeScreen),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  const QuickReplyChips(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ChatBottomBar(
