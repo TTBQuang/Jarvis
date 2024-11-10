@@ -39,6 +39,7 @@ dependencies:
   forui: ^0.6.1
   forui_assets: ^0.3.0
   shadcn_ui: ^0.13.4+1
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-class DrawerNotifier extends ValueNotifier<int> {
-  DrawerNotifier(super.value);
+class DrawerViewModel extends ValueNotifier<int> {
+  DrawerViewModel(super.value);
 
   void selectTab(int index) {
     value = index;

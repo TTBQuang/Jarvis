@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:jarvis/view/home/notifier/drawer_notifier.dart';
+import 'package:jarvis/repository/auth_repository.dart';
+import 'package:jarvis/view_model/auth_view_model.dart';
+import 'package:jarvis/view_model/drawer_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => DrawerNotifier(0),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => DrawerViewModel(0)),
+        ChangeNotifierProvider(create: (context) => AuthViewModel(AuthRepository())),
+      ],
       child: const MyApp(),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
