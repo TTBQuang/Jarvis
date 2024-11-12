@@ -1,15 +1,17 @@
 import 'package:jarvis/model/user_info.dart';
 import 'package:jarvis/model/user_token.dart';
+import 'package:uuid/uuid.dart';
 
 class User {
-  late final UserInfo userInfo;
-  late final UserToken userToken;
+  UserInfo? userInfo;
+  UserToken? userToken;
+  late final String userUuid;
 
   User({
-    UserToken? userToken,
-    UserInfo? userInfo,
+    this.userToken,
+    this.userInfo,
   }) {
-    this.userToken = userToken ?? UserToken();
-    this.userInfo = userInfo ?? UserInfo();
+    userUuid = const Uuid().v4();
+    print(userUuid);
   }
 }

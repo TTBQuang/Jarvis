@@ -17,6 +17,7 @@ class PersonalScreen extends StatelessWidget {
       builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
         return MyScaffold(
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             centerTitle: true,
             forceMaterialTransparency: true,

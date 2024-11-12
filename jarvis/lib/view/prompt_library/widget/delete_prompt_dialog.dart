@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DeletePromptDialog extends StatelessWidget {
-  const DeletePromptDialog({super.key});
+  final VoidCallback onDelete;
+
+  const DeletePromptDialog({super.key, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,16 @@ class DeletePromptDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold),),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            onDelete();
+            Navigator.of(context).pop();
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,

@@ -36,6 +36,7 @@ class PricingScreen extends StatelessWidget {
               child: child!);
         },
         home: MyScaffold(
+          resizeToAvoidBottomInset: true,
           appBar: TopAppBarWithDrawerIcon(isLargeScreen: isLargeScreen),
           body: Center(
             child: Container(

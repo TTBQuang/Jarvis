@@ -45,6 +45,7 @@ class BotDetailScreen extends StatelessWidget {
               child: child!);
         },
         home: MyScaffold(
+          resizeToAvoidBottomInset: true,
           isLargeScreen: isLargeScreen,
           appBar: AppBar(
             centerTitle: true,

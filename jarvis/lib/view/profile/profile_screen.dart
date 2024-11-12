@@ -18,6 +18,7 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
         return MyScaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             centerTitle: true,
             forceMaterialTransparency: true,
@@ -62,14 +63,14 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          user?.userInfo.username ?? '',
+                          user?.userInfo?.username ?? '',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                         subtitle: Text(
-                          user?.userInfo.email ?? '',
+                          user?.userInfo?.email ?? '',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,

@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
         return MyScaffold(
+          resizeToAvoidBottomInset: true,
           appBar: HomeTopAppBar(isLargeScreen: isLargeScreen),
           body: Center(
             child: Container(

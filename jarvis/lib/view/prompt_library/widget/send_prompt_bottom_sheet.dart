@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../../../model/language.dart';
+import '../../../model/prompt.dart';
+
 class SendPromptBottomSheet extends StatefulWidget {
-  const SendPromptBottomSheet({super.key});
+  final Prompt prompt;
+
+  const SendPromptBottomSheet({super.key, required this.prompt});
 
   @override
   State<StatefulWidget> createState() => _SendPromptBottomSheetState();
 }
 
 class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
-  final List<Map<String, String>> languages = [
-    {'name': 'English', 'description': 'English language'},
-    {'name': 'Vietnamese', 'description': 'Ngôn ngữ Việt Nam'},
-    {'name': 'French', 'description': 'Langue française'},
-    {'name': 'Spanish', 'description': 'Idioma español'},
-  ];
+  Language selectedLanguage = Language.auto;
+  late TextEditingController contentController;
 
-  int selectedLanguageIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    contentController = TextEditingController(text: widget.prompt.content);
+    selectedLanguage = widget.prompt.language;
+  }
+
+  @override
+  void dispose() {
+    contentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +43,9 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Name of Prompt',
-                    style: TextStyle(
+                  Text(
+                    widget.prompt.title,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -46,17 +58,24 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                   ),
                 ],
               ),
+              Text(
+                '${widget.prompt.category.displayName} - ${widget.prompt.userName}',
+                style: const TextStyle(fontSize: 16),
+              ),
+              Text(
+                widget.prompt.description,
+                style: const TextStyle(fontSize: 14),
+              ),
               const SizedBox(height: 16),
               const Text(
                 'Prompt',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               TextField(
-                enabled: false,
+                controller: contentController,
                 maxLines: null,
                 decoration: InputDecoration(
-                  hintText: 'Prompt content',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -68,7 +87,7 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                 children: [
                   const Text(
                     'Output Language',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
@@ -80,35 +99,34 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                           color: Theme.of(context).brightness == Brightness.dark
                               ? const Color(0xFF303f52)
                               : const Color(0xFFdce3f3),
-                          child: DropdownButton<int>(
+                          child: DropdownButton<Language>(
                             borderRadius: BorderRadius.circular(8),
                             isExpanded: true,
-                            value: selectedLanguageIndex,
+                            value: selectedLanguage,
                             underline: Container(),
-                            dropdownColor:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? const Color(0xFF303f52)
-                                    : const Color(0xFFdce3f3),
+                            dropdownColor: Theme.of(context).brightness == Brightness.dark
+                                ? const Color(0xFF303f52)
+                                : const Color(0xFFdce3f3),
                             menuMaxHeight: 300,
-                            items: List.generate(languages.length, (index) {
-                              return DropdownMenuItem<int>(
-                                value: index,
-                                child: _buildDropdownItem(languages[index]),
+                            items: Language.values.map((Language language) {
+                              return DropdownMenuItem<Language>(
+                                value: language,
+                                child: _buildDropdownItem(language),
                               );
-                            }),
+                            }).toList(),
                             selectedItemBuilder: (BuildContext context) {
-                              return List.generate(languages.length, (index) {
+                              return Language.values.map((Language language) {
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: Center(
-                                    child: Text(languages[index]['name'] ?? ''),
+                                    child: Text(language.englishName),
                                   ),
                                 );
-                              });
+                              }).toList();
                             },
-                            onChanged: (int? newIndex) {
+                            onChanged: (Language? newLanguage) {
                               setState(() {
-                                selectedLanguageIndex = newIndex ?? 0;
+                                selectedLanguage = newLanguage ?? Language.english;
                               });
                             },
                           ),
@@ -117,17 +135,6 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: 'TOPIC',
-                  hintMaxLines: 4,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -154,22 +161,21 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
     );
   }
 
-  Widget _buildDropdownItem(Map<String, String> lang) {
+  Widget _buildDropdownItem(Language language) {
     return RichText(
       softWrap: false,
       text: TextSpan(
         children: [
           TextSpan(
-            text: lang['name'],
+            text: language.englishName,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-
           TextSpan(
-            text: '\n${lang['description']}',
+            text: '\n${language.nativeName}',
             style: const TextStyle(
               fontSize: 12,
               color: Colors.grey,

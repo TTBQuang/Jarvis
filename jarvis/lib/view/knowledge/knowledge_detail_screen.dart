@@ -38,6 +38,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
               child: child!);
         },
         home: MyScaffold(
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             centerTitle: true,
             forceMaterialTransparency: true,

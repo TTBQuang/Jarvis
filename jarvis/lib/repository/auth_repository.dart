@@ -4,12 +4,13 @@ import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/user_info.dart';
 import 'package:jarvis/model/user_token.dart';
 
+import '../model/user.dart';
+
 class AuthRepository {
   Future<UserToken?> signInWithEmailAndPassword(
       String email, String password) async {
     var headers = {
       'x-jarvis-guid': '',
-      'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
       'Content-Type': 'application/json'
     };
     var request =
@@ -27,7 +28,7 @@ class AuthRepository {
       var jsonResponse = json.decode(responseBody);
       return UserToken.fromJson(jsonResponse);
     } else {
-      throw Exception('${response.reasonPhrase}');
+      throw Exception(response.reasonPhrase);
     }
   }
 
@@ -35,7 +36,6 @@ class AuthRepository {
       String email, String password, String username) async {
     var headers = {
       'x-jarvis-guid': '',
-      'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
       'Content-Type': 'application/json'
     };
     var request =
@@ -50,7 +50,7 @@ class AuthRepository {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode != 201) {
-      throw Exception('${response.reasonPhrase}');
+      throw Exception(response.reasonPhrase);
     }
   }
 
@@ -58,7 +58,6 @@ class AuthRepository {
     var headers = {
       'x-jarvis-guid': '',
       'Authorization': 'Bearer $token',
-      'User-Agent': 'Apidog/1.0.0 (https://apidog.com)'
     };
     var request =
         http.Request('GET', Uri.parse('$baseUrl/api/v1/auth/sign-out'));
@@ -79,7 +78,6 @@ class AuthRepository {
       var headers = {
         'x-jarvis-guid': '',
         'Authorization': 'Bearer $token',
-        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)'
       };
       var request =
           http.MultipartRequest('GET', Uri.parse('$baseUrl/api/v1/auth/me'));
@@ -92,12 +90,39 @@ class AuthRepository {
         var responseBody = await response.stream.bytesToString();
         var jsonResponse = json.decode(responseBody);
         return UserInfo.fromJson(jsonResponse);
+      } else if (response.statusCode == 401) {
+        throw Exception('Unauthorized');
       } else {
-        throw Exception('${response.reasonPhrase}');
+        throw Exception(response.reasonPhrase);
       }
     } catch (e) {
       print(e);
-      throw Exception('$e');
+      throw Exception(e);
+    }
+  }
+
+  Future<String> refreshToken(User user) async {
+    var headers = {
+      'x-jarvis-guid': user.userUuid,
+    };
+    var request = http.Request(
+      'GET',
+      Uri.parse(
+          '$baseUrl/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshToken}'),
+    );
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      final data = jsonDecode(responseBody);
+      final accessToken = data['token']?['accessToken'];
+      return accessToken;
+    } else {
+      print(response.statusCode);
+      return '';
     }
   }
 }

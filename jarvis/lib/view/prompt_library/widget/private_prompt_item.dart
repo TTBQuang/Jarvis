@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/model/prompt.dart';
 import 'package:jarvis/view/prompt_library/widget/delete_prompt_dialog.dart';
 import 'package:jarvis/view/prompt_library/widget/send_prompt_bottom_sheet.dart';
 import 'package:jarvis/view/prompt_library/widget/update_prompt_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
+import '../../../view_model/prompt_view_model.dart';
 
 class PrivatePromptItem extends StatelessWidget {
-  const PrivatePromptItem({super.key});
+  final Prompt prompt;
+
+  const PrivatePromptItem({super.key, required this.prompt});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
-          title: const Text(
-            'Private prompt',
-            style: TextStyle(fontSize: 16),
+          title: Text(
+            prompt.title,
+            style: const TextStyle(fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),
           trailing: Row(
@@ -53,7 +58,13 @@ class PrivatePromptItem extends StatelessWidget {
             maxHeight: MediaQuery.of(context).size.height *
                 maxBottomSheetHeightPercentage,
           ),
-          child: const UpdatePromptBottomSheet(),
+          child: UpdatePromptBottomSheet(
+            prompt: prompt,
+            onSave: (Prompt prompt) async {
+              final PromptViewModel promptViewModel = context.read<PromptViewModel>();
+              await promptViewModel.updatePrompt(prompt);
+            },
+          ),
         );
       },
     );
@@ -63,7 +74,12 @@ class PrivatePromptItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const DeletePromptDialog();
+        return DeletePromptDialog(
+          onDelete: () async {
+            final promptViewModel = context.read<PromptViewModel>();
+            await promptViewModel.deletePrompt(promptId: prompt.id);
+          },
+        );
       },
     );
   }
@@ -78,7 +94,7 @@ class PrivatePromptItem extends StatelessWidget {
             maxHeight: MediaQuery.of(context).size.height *
                 maxBottomSheetHeightPercentage,
           ),
-          child: SendPromptBottomSheet(),
+          child: SendPromptBottomSheet(prompt: prompt),
         );
       },
     );

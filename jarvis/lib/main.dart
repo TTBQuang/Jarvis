@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/repository/auth_repository.dart';
+import 'package:jarvis/repository/prompt_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
+import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
+  final AuthRepository authRepository = AuthRepository();
+  final authViewModel = AuthViewModel(authRepository);
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => DrawerViewModel(0)),
-        ChangeNotifierProvider(create: (context) => AuthViewModel(AuthRepository())),
+        ChangeNotifierProvider(
+            create: (context) => authViewModel),
+        ChangeNotifierProvider(
+          create: (context) => PromptViewModel(
+            authRepository: authRepository,
+            promptRepository: PromptRepository(),
+            authViewModel: authViewModel,
+          ),
+        ),
       ],
       child: const MyApp(),
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

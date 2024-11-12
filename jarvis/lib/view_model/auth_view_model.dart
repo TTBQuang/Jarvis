@@ -7,13 +7,16 @@ import '../repository/auth_repository.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
-  User? user;
+  late User user;
   bool isSigningIn = false;
   bool isSigningUp = false;
   String errorMessageSignIn = '';
   String errorMessageSignUp = '';
 
-  AuthViewModel(this._authRepository);
+
+  AuthViewModel(this._authRepository){
+    user = User();
+  }
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     isSigningIn = true;
@@ -33,12 +36,12 @@ class AuthViewModel extends ChangeNotifier {
           user = User(userToken: userToken, userInfo: userInfo);
         }
       }
+      notifyListeners();
     } catch (e) {
       isSigningIn = false;
-      errorMessageSignIn = e.toString();
+      errorMessageSignIn = 'Failed to sign in';
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   Future<bool> signUpWithEmailAndPassword(
@@ -47,6 +50,25 @@ class AuthViewModel extends ChangeNotifier {
     errorMessageSignUp = '';
     notifyListeners();
 
+    // Validate email format using RegExp
+    RegExp emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (!emailRegExp.hasMatch(email)) {
+      errorMessageSignUp = 'Invalid email format';
+      isSigningUp = false;
+      notifyListeners();
+      return false;
+    }
+
+    // Validate password: At least 6 characters, 1 uppercase letter, 1 number, and 1 special character
+    RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$');
+    if (!passwordRegExp.hasMatch(password)) {
+      errorMessageSignUp = 'Password must be at least 6 characters long, and include at least '
+          'one uppercase letter, one number, and one special character.';
+      isSigningUp = false;
+      notifyListeners();
+      return false;
+    }
+
     try {
       await _authRepository.signUpWithEmailAndPassword(
           email, password, username);
@@ -54,7 +76,8 @@ class AuthViewModel extends ChangeNotifier {
       isSigningUp = false;
       return true;
     } catch (e) {
-      errorMessageSignUp = e.toString();
+      print(e.toString());
+      errorMessageSignUp = 'Fail to sign up';
       isSigningUp = false;
       notifyListeners();
       return false;
@@ -62,8 +85,8 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut(user?.userToken.accessToken ?? '');
-    user = null;
+    await _authRepository.signOut(user.userToken?.accessToken ?? '');
+    user = User();
     notifyListeners();
   }
 }
