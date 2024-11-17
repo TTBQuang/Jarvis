@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view_model/chat_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ChatBottomBar extends StatefulWidget {
   final void Function(BuildContext context) onAddIconBtnClicked;
@@ -29,6 +31,16 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
   void dispose() {
     _textController.dispose();
     super.dispose();
+  }
+
+  void sendMessage(String message) {
+    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+
+    if (chatViewModel.conversationId == null) {
+      chatViewModel.createConversation(content: message);
+    } else {
+      chatViewModel.sendMessage(message);
+    }
   }
 
   @override
@@ -66,7 +78,12 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
         ),
         IconButton(
           icon: const Icon(Icons.send),
-          onPressed: _isTextEmpty ? null : () {},
+          onPressed: _isTextEmpty
+              ? null
+              : () {
+                  sendMessage(_textController.text);
+                  _textController.clear();
+                },
           color: _isTextEmpty ? Colors.grey : Colors.blue,
         ),
       ],
