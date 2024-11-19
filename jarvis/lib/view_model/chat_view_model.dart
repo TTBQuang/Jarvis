@@ -16,6 +16,7 @@ class ChatViewModel extends ChangeNotifier {
   List<Conversation>? conversations = [];
   String? conversationId;
   List<ConversationMessage>? conversationMessages = [];
+  AssistantId? assistantId = AssistantId.gpt_4o_mini;
 
   Future<void> getConversations({
     String? cursor,
@@ -32,7 +33,8 @@ class ChatViewModel extends ChangeNotifier {
 
       conversations = conversationsResponse.items;
       conversationId = conversations?.first.id;
-      getConversation(conversationId!);
+      getConversation(
+          conversationId: conversationId!, assistantId: assistantId);
       notifyListeners();
     } catch (e) {}
   }
@@ -50,30 +52,35 @@ class ChatViewModel extends ChangeNotifier {
       );
 
       conversationId = createConversationResponse.conversationId;
-      getConversation(conversationId!);
+      getConversation(
+          conversationId: conversationId!, assistantId: assistantId);
       notifyListeners();
     } catch (e) {}
   }
 
-  Future<void> getConversation(String conversationId) async {
+  Future<void> getConversation(
+      {required String conversationId, AssistantId? assistantId}) async {
     try {
       GetConversationResponse conversationResponse =
-          await chatRepository.getConversation(conversationId: conversationId);
+          await chatRepository.getConversation(
+              conversationId: conversationId, assistantId: assistantId);
 
       conversationMessages = conversationResponse.items;
       notifyListeners();
     } catch (e) {}
   }
 
-  Future<void> sendMessage(String message) async {
+  Future<void> sendMessage(
+      {required String message, AssistantId? assistantId}) async {
     try {
       await chatRepository.sendMessage(
-        conversationMessages: conversationMessages,
-        conversationId: conversationId,
-        content: message,
-      );
+          conversationMessages: conversationMessages,
+          conversationId: conversationId,
+          content: message,
+          assistantId: assistantId);
 
-      getConversation(conversationId!);
+      getConversation(
+          conversationId: conversationId!, assistantId: assistantId);
       notifyListeners();
     } catch (e) {}
   }

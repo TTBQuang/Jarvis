@@ -24,8 +24,7 @@ class ChatRepository {
         if (assistantId != null) 'assistantId': assistantId.value,
         'assistantModel': 'dify',
       });
-      Map<String, dynamic> jsonData = jsonDecode(response.data);
-      return GetConversationsResponse.fromJson(jsonData);
+      return GetConversationsResponse.fromJson(response.data);
     } catch (e) {
       throw Exception(e);
     }
@@ -39,11 +38,10 @@ class ChatRepository {
     try {
       final response = await dioClient.dio.post('/api/v1/ai-chat', data: {
         'content': content,
-        if (assistantId != null) 'assistantId': assistantId.value,
+        'assistant': {"id": assistantId?.value, "model": 'dify'},
         if (files != null) 'files': files,
       });
-      Map<String, dynamic> jsonData = jsonDecode(response.data);
-      return CreateConversationResponse.fromJson(jsonData);
+      return CreateConversationResponse.fromJson(response.data);
     } catch (e) {
       throw Exception(e);
     }
@@ -64,8 +62,7 @@ class ChatRepository {
             if (assistantId != null) 'assistantId': assistantId.value,
             'assistantModel': 'dify',
           });
-      Map<String, dynamic> jsonData = jsonDecode(response.data);
-      return GetConversationResponse.fromJson(jsonData);
+      return GetConversationResponse.fromJson(response.data);
     } catch (e) {
       throw Exception(e);
     }
@@ -80,9 +77,13 @@ class ChatRepository {
     try {
       await dioClient.dio.post('/api/v1/ai-chat/messages', data: {
         'content': content,
-        if (assistantId != null) 'assistantId': assistantId.value,
-        if (conversationMessages != null) 'messages': conversationMessages,
+        'assistant': {"id": assistantId?.value, "model": 'dify'},
+        'metadata': {
+          "conversation": {"id": conversationId, "messages": []}
+        },
       });
-    } catch (e) {}
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

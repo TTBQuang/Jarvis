@@ -37,9 +37,11 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
     final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
 
     if (chatViewModel.conversationId == null) {
-      chatViewModel.createConversation(content: message);
+      chatViewModel.createConversation(
+          content: message, assistantId: chatViewModel.assistantId);
     } else {
-      chatViewModel.sendMessage(message);
+      chatViewModel.sendMessage(
+          message: message, assistantId: chatViewModel.assistantId);
     }
   }
 
