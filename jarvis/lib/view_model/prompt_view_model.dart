@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/prompt.dart';
 import 'package:jarvis/model/prompt_list.dart';
 import 'package:jarvis/repository/auth_repository.dart';
+import 'package:jarvis/view/prompt_library/prompt_library_bottom_sheet.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 
 import '../model/category.dart';
@@ -23,6 +25,8 @@ class PromptViewModel extends ChangeNotifier {
 
   PromptList? privatePromptList;
   String errorMessagePrivateTab = '';
+
+  PromptType currentType = PromptType.private;
 
   Future<void> fetchPublicPrompt({
     String? query,
@@ -241,5 +245,34 @@ class PromptViewModel extends ChangeNotifier {
         }
       }
     }
+  }
+
+  Future<void> createPrompt(
+      {required String category,
+      required String content,
+      required String description,
+      required bool isPublic,
+      required String language,
+      required String title}) async {
+    try {
+      await promptRepository.createPrompt(
+          category: category,
+          content: content,
+          description: description,
+          isPublic: isPublic,
+          language: language,
+          title: title);
+
+      isPublic ? fetchPublicPrompt() : fetchPrivatePrompts();
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  void changePromptType(PromptType type) {
+    this.currentType = type;
+    type == PromptType.public
+        ? fetchPublicPrompt(limit: defaultLimit)
+        : fetchPrivatePrompts(limit: defaultLimit);
+    notifyListeners();
   }
 }

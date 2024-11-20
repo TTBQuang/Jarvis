@@ -3,6 +3,7 @@ import 'package:forui/forui.dart';
 import 'package:jarvis/repository/auth_repository.dart';
 import 'package:jarvis/repository/prompt_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
+import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
 import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
@@ -17,14 +18,18 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => DrawerViewModel(0)),
-        ChangeNotifierProvider(
-            create: (context) => authViewModel),
+        ChangeNotifierProvider(create: (context) => authViewModel),
         ChangeNotifierProvider(
           create: (context) => PromptViewModel(
             authRepository: authRepository,
-            promptRepository: PromptRepository(),
+            promptRepository: PromptRepository(authViewModel: authViewModel),
             authViewModel: authViewModel,
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return ChatViewModel(authViewModel: context.read<AuthViewModel>());
+          },
         ),
       ],
       child: const MyApp(),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/language.dart';
+import 'package:jarvis/view/prompt_library/prompt_library_bottom_sheet.dart';
+import 'package:jarvis/view_model/prompt_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/category.dart';
 
@@ -28,6 +31,9 @@ class _NewPromptBottomSheetState extends State<NewPromptBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final promptViewModel =
+        Provider.of<PromptViewModel>(context, listen: false);
+
     return Padding(
       // Push the content in the bottom sheet up when the keyboard appears
       padding: MediaQuery.of(context).viewInsets,
@@ -247,7 +253,17 @@ class _NewPromptBottomSheetState extends State<NewPromptBottomSheet> {
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      promptViewModel.createPrompt(
+                        category: selectedCategory.name,
+                        content: promptController.text,
+                        description: descriptionController.text,
+                        isPublic:
+                            promptViewModel.currentType == PromptType.public,
+                        language: selectedLanguage.name,
+                        title: nameController.text,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4b85e9),
                       foregroundColor: Colors.white,

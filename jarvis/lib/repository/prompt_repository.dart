@@ -1,12 +1,21 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:jarvis/config/DioClient.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/prompt.dart';
 import 'package:jarvis/model/prompt_list.dart';
 import 'package:jarvis/model/user.dart';
+import 'package:jarvis/view_model/auth_view_model.dart';
 
 class PromptRepository {
+  late DioClient dioClient;
+  AuthViewModel? authViewModel;
+
+  PromptRepository({this.authViewModel}) {
+    dioClient = DioClient(authViewModel: authViewModel);
+  }
+
   Future<PromptList> fetchPrompts({
     String? query,
     int? offset,
@@ -162,6 +171,27 @@ class PromptRepository {
       throw Exception('Unauthorized');
     } else {
       print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> createPrompt(
+      {required String category,
+      required String content,
+      required String description,
+      required bool isPublic,
+      required String language,
+      required String title}) async {
+    try {
+      await dioClient.dio.post('/api/v1/prompts', data: {
+        'title': title,
+        'content': content,
+        'description': description,
+        'category': category,
+        'language': language,
+        'isPublic': isPublic
+      });
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

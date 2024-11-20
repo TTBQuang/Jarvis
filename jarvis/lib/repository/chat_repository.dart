@@ -68,20 +68,22 @@ class ChatRepository {
     }
   }
 
-  Future<void> sendMessage({
+  Future<SendMessageResponse> sendMessage({
     required String content,
     AssistantId? assistantId,
     List<ConversationMessage>? conversationMessages,
     String? conversationId,
   }) async {
     try {
-      await dioClient.dio.post('/api/v1/ai-chat/messages', data: {
+      final response =
+          await dioClient.dio.post('/api/v1/ai-chat/messages', data: {
         'content': content,
         'assistant': {"id": assistantId?.value, "model": 'dify'},
         'metadata': {
           "conversation": {"id": conversationId, "messages": []}
         },
       });
+      return SendMessageResponse.fromJson(response.data);
     } catch (e) {
       throw Exception(e);
     }

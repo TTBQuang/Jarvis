@@ -3,6 +3,7 @@ import 'package:jarvis/view/email/email_screen.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 import 'package:jarvis/view/personal/personal_screen.dart';
 import 'package:jarvis/view/profile/profile_screen.dart';
+import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../view_model/auth_view_model.dart';
 import '../../auth/auth_screen.dart';
@@ -21,6 +22,8 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final drawerNotifier = Provider.of<DrawerViewModel>(context);
+    final chatViewModel = Provider.of<ChatViewModel>(context);
+    final conversations = chatViewModel.conversations;
 
     return Drawer(
       child: SafeArea(
@@ -132,14 +135,30 @@ class HomeDrawer extends StatelessWidget {
               },
             ),
             const Divider(),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text(
+                'New Chat',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                chatViewModel.changeConversation(null);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: conversations?.length,
                 itemBuilder: (context, index) {
                   int listViewIndex = index + 4;
                   return ListTile(
                     title: Text(
-                      'Chat Item ${index + 1}',
+                      conversations![index].title,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -156,6 +175,13 @@ class HomeDrawer extends StatelessWidget {
                         : null,
                     onTap: () {
                       drawerNotifier.selectTab(listViewIndex);
+                      chatViewModel
+                          .changeConversation(conversations![index].id);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
                     },
                   );
                 },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view_model/chat_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/language.dart';
 import '../../../model/prompt.dart';
@@ -31,6 +33,8 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
@@ -104,9 +108,10 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                             isExpanded: true,
                             value: selectedLanguage,
                             underline: Container(),
-                            dropdownColor: Theme.of(context).brightness == Brightness.dark
-                                ? const Color(0xFF303f52)
-                                : const Color(0xFFdce3f3),
+                            dropdownColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const Color(0xFF303f52)
+                                    : const Color(0xFFdce3f3),
                             menuMaxHeight: 300,
                             items: Language.values.map((Language language) {
                               return DropdownMenuItem<Language>(
@@ -126,7 +131,8 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                             },
                             onChanged: (Language? newLanguage) {
                               setState(() {
-                                selectedLanguage = newLanguage ?? Language.english;
+                                selectedLanguage =
+                                    newLanguage ?? Language.english;
                               });
                             },
                           ),
@@ -140,7 +146,11 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    chatViewModel.sendMessage(
+                      message: contentController.text,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF4b85e9),
                     foregroundColor: Colors.white,

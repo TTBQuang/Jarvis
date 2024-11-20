@@ -159,3 +159,23 @@ enum AssistantId {
     );
   }
 }
+
+class SendMessageResponse {
+  String message;
+  int remainingUsage;
+  String conversationId;
+
+  SendMessageResponse({
+    required this.message,
+    required this.remainingUsage,
+    required this.conversationId,
+  });
+
+  factory SendMessageResponse.fromJson(Map<String, dynamic> json) {
+    return SendMessageResponse(
+      message: json['message'] ?? '',
+      remainingUsage: json['remainingUsage'] ?? 0,
+      conversationId: json['conversationId'] ?? '',
+    );
+  }
+}

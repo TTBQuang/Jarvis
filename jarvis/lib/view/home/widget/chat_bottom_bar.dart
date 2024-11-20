@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constant.dart';
+import 'package:jarvis/view/prompt_library/widget/send_prompt_bottom_sheet.dart';
 import 'package:jarvis/view_model/chat_view_model.dart';
+import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ChatBottomBar extends StatefulWidget {
@@ -14,6 +17,7 @@ class ChatBottomBar extends StatefulWidget {
 class _ChatBottomBarState extends State<ChatBottomBar> {
   final TextEditingController _textController = TextEditingController();
   bool _isTextEmpty = true;
+  OverlayEntry? _overlayEntry;
 
   @override
   void initState() {
@@ -23,6 +27,19 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
     _textController.addListener(() {
       setState(() {
         _isTextEmpty = _textController.text.isEmpty;
+
+        // Listen to TextField changes
+        _textController.addListener(() {
+          setState(() {
+            _isTextEmpty = _textController.text.isEmpty;
+
+            if (_textController.text.endsWith('/')) {
+              _showPromptsOverlay();
+            } else {
+              _removePromptsOverlay();
+            }
+          });
+        });
       });
     });
   }
@@ -30,23 +47,77 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
   @override
   void dispose() {
     _textController.dispose();
+    _removePromptsOverlay();
     super.dispose();
   }
 
-  void sendMessage(String message) {
-    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+  void _showPromptsOverlay() {
+    if (_overlayEntry != null) return;
 
-    if (chatViewModel.conversationId == null) {
-      chatViewModel.createConversation(
-          content: message, assistantId: chatViewModel.assistantId);
-    } else {
-      chatViewModel.sendMessage(
-          message: message, assistantId: chatViewModel.assistantId);
-    }
+    final renderBox = context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context);
+    final offset = renderBox.localToGlobal(Offset.zero);
+
+    final promptsViewModel =
+        Provider.of<PromptViewModel>(context, listen: false);
+    final _prompts = promptsViewModel.privatePromptList!.items +
+        promptsViewModel.publicPromptList!.items;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: offset.dx + 10,
+        top: offset.dy - 150, // Adjust the position as needed
+        child: Material(
+          elevation: 4,
+          child: Container(
+            width: renderBox.size.width - 20,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: _prompts.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_prompts[index].title),
+                  onTap: () {
+                    _removePromptsOverlay();
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return Container(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height *
+                                maxBottomSheetHeightPercentage,
+                          ),
+                          child: SendPromptBottomSheet(prompt: _prompts[index]),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay?.insert(_overlayEntry!);
+  }
+
+  void _removePromptsOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+
     return Row(
       children: [
         Container(
@@ -69,7 +140,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
           child: TextField(
             controller: _textController,
             decoration: InputDecoration(
-              hintText: 'Type a message',
+              hintText: 'Ask me anything, press \'/\' for prompts...',
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
               border: OutlineInputBorder(
@@ -83,7 +154,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
           onPressed: _isTextEmpty
               ? null
               : () {
-                  sendMessage(_textController.text);
+                  chatViewModel.sendMessage(message: _textController.text);
                   _textController.clear();
                 },
           color: _isTextEmpty ? Colors.grey : Colors.blue,

@@ -6,45 +6,16 @@ import 'package:jarvis/view/prompt_library/widget/public_prompt_tab.dart';
 import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../constant.dart';
-
 enum PromptType { private, public }
 
-class PromptLibraryBottomSheet extends StatefulWidget {
+class PromptLibraryBottomSheet extends StatelessWidget {
   const PromptLibraryBottomSheet({super.key});
 
   @override
-  State<StatefulWidget> createState() => _PromptLibraryBottomSheetState();
-}
-
-class _PromptLibraryBottomSheetState extends State<PromptLibraryBottomSheet> {
-  PromptType currentType = PromptType.private;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPromptData();
-  }
-
-  void togglePromptType(PromptType type) {
-    setState(() {
-      currentType = type;
-      fetchPromptData();
-    });
-  }
-
-  void fetchPromptData() {
-    final promptViewModel = Provider.of<PromptViewModel>(context, listen: false);
-
-    if (currentType == PromptType.private) {
-      promptViewModel.fetchPrivatePrompts(limit: defaultLimit);
-    } else {
-      promptViewModel.fetchPublicPrompt(limit: defaultLimit);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final promptViewModel = Provider.of<PromptViewModel>(context);
+    final currentType = promptViewModel.currentType;
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -55,7 +26,7 @@ class _PromptLibraryBottomSheetState extends State<PromptLibraryBottomSheet> {
           const SizedBox(height: 16),
           PromptToggle(
             currentType: currentType,
-            onToggle: togglePromptType,
+            onToggle: promptViewModel.changePromptType,
           ),
           const SizedBox(height: 16),
           Expanded(

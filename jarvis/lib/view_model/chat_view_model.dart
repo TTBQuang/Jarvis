@@ -17,6 +17,7 @@ class ChatViewModel extends ChangeNotifier {
   String? conversationId;
   List<ConversationMessage>? conversationMessages = [];
   AssistantId? assistantId = AssistantId.gpt_4o_mini;
+  int? token = 10;
 
   Future<void> getConversations({
     String? cursor,
@@ -39,25 +40,6 @@ class ChatViewModel extends ChangeNotifier {
     } catch (e) {}
   }
 
-  Future<void> createConversation(
-      {required String content,
-      AssistantId? assistantId,
-      List<String>? files}) async {
-    try {
-      CreateConversationResponse createConversationResponse =
-          await chatRepository.createConversation(
-        content: content,
-        assistantId: assistantId,
-        files: files,
-      );
-
-      conversationId = createConversationResponse.conversationId;
-      getConversation(
-          conversationId: conversationId!, assistantId: assistantId);
-      notifyListeners();
-    } catch (e) {}
-  }
-
   Future<void> getConversation(
       {required String conversationId, AssistantId? assistantId}) async {
     try {
@@ -70,18 +52,42 @@ class ChatViewModel extends ChangeNotifier {
     } catch (e) {}
   }
 
-  Future<void> sendMessage(
-      {required String message, AssistantId? assistantId}) async {
+  Future<void> sendMessage({required String message}) async {
     try {
-      await chatRepository.sendMessage(
-          conversationMessages: conversationMessages,
-          conversationId: conversationId,
+      if (conversationId == null) {
+        CreateConversationResponse createConversationResponse =
+            await chatRepository.createConversation(
           content: message,
-          assistantId: assistantId);
+          assistantId: assistantId,
+        );
 
-      getConversation(
-          conversationId: conversationId!, assistantId: assistantId);
+        token = createConversationResponse.remainingUsage;
+        conversationId = createConversationResponse.conversationId;
+        getConversation(
+            conversationId: conversationId!, assistantId: assistantId);
+      } else {
+        SendMessageResponse sendMessageResponse =
+            await chatRepository.sendMessage(
+                conversationMessages: conversationMessages,
+                conversationId: conversationId,
+                content: message,
+                assistantId: assistantId);
+
+        token = sendMessageResponse.remainingUsage;
+        getConversation(
+            conversationId: conversationId!, assistantId: assistantId);
+      }
       notifyListeners();
     } catch (e) {}
+  }
+
+  void changeAssistant(AssistantId assistantId) {
+    this.assistantId = assistantId;
+    notifyListeners();
+  }
+
+  void changeConversation(String? conversationId) {
+    this.conversationId = conversationId;
+    notifyListeners();
   }
 }
