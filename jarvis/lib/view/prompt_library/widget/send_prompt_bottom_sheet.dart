@@ -17,18 +17,36 @@ class SendPromptBottomSheet extends StatefulWidget {
 class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
   Language selectedLanguage = Language.auto;
   late TextEditingController contentController;
+  final List<TextEditingController> placeholderControllers = [];
+  late List<String> placeholders;
 
   @override
   void initState() {
     super.initState();
     contentController = TextEditingController(text: widget.prompt.content);
     selectedLanguage = widget.prompt.language;
+
+    // Extract placeholders from the content
+    placeholders = _extractPlaceholders(widget.prompt.content);
+
+    // Initialize TextEditingController for each placeholder
+    placeholderControllers.addAll(
+      placeholders.map((_) => TextEditingController()),
+    );
   }
 
   @override
   void dispose() {
     contentController.dispose();
+    for (var controller in placeholderControllers) {
+      controller.dispose();
+    }
     super.dispose();
+  }
+
+  List<String> _extractPlaceholders(String content) {
+    final regex = RegExp(r'\[(.*?)\]');
+    return regex.allMatches(content).map((match) => match.group(1)!).toList();
   }
 
   @override
@@ -143,13 +161,20 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
                 ],
               ),
               const SizedBox(height: 16),
+              ..._buildPlaceholderFields(),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Combine user input with placeholders
+                    final filledPrompt = _generateFilledPrompt();
                     chatViewModel.sendMessage(
-                      message: contentController.text,
+                      message: filledPrompt,
                     );
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF4b85e9),
@@ -169,6 +194,37 @@ class _SendPromptBottomSheetState extends State<SendPromptBottomSheet> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildPlaceholderFields() {
+    return List<Widget>.generate(
+      placeholders.length,
+      (index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: TextField(
+            controller: placeholderControllers[index],
+            decoration: InputDecoration(
+              labelText: placeholders[index],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _generateFilledPrompt() {
+    String content = widget.prompt.content;
+    for (int i = 0; i < placeholders.length; i++) {
+      content = content.replaceFirst(
+        '[${placeholders[i]}]',
+        placeholderControllers[i].text,
+      );
+    }
+    return content;
   }
 
   Widget _buildDropdownItem(Language language) {

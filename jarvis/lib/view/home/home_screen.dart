@@ -4,6 +4,8 @@ import 'package:jarvis/view/home/widget/home_top_app_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
+import 'package:jarvis/view_model/chat_view_model.dart';
+import 'package:provider/provider.dart';
 import '../../constant.dart';
 
 class HomeScreen extends StatelessWidget {

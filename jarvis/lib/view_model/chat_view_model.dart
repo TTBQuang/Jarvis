@@ -22,7 +22,6 @@ class ChatViewModel extends ChangeNotifier {
   Future<void> getConversations({
     String? cursor,
     int? limit,
-    AssistantId? assistantId,
   }) async {
     try {
       GetConversationsResponse conversationsResponse =
@@ -63,6 +62,12 @@ class ChatViewModel extends ChangeNotifier {
 
         token = createConversationResponse.remainingUsage;
         conversationId = createConversationResponse.conversationId;
+        conversations?.insert(
+            0,
+            Conversation(
+                createdAt: DateTime.now().microsecondsSinceEpoch,
+                title: message,
+                id: conversationId!));
         getConversation(
             conversationId: conversationId!, assistantId: assistantId);
       } else {
@@ -88,6 +93,12 @@ class ChatViewModel extends ChangeNotifier {
 
   void changeConversation(String? conversationId) {
     this.conversationId = conversationId;
+    if (conversationId != null) {
+      getConversation(
+          conversationId: conversationId!, assistantId: assistantId);
+    } else {
+      conversationMessages = [];
+    }
     notifyListeners();
   }
 }

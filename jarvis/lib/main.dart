@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/constant.dart';
 import 'package:jarvis/repository/auth_repository.dart';
 import 'package:jarvis/repository/prompt_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
@@ -37,8 +38,27 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Perform the operation after the widget is initialized.
+    Future.microtask(() {
+      final chatViewModel = context.read<ChatViewModel>();
+      final promptsViewModel = context.read<PromptViewModel>();
+      chatViewModel.getConversations();
+      promptsViewModel.fetchPrivatePrompts(limit: defaultLimit);
+      promptsViewModel.fetchPublicPrompt(limit: defaultLimit);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

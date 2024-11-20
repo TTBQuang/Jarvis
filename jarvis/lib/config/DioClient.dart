@@ -10,8 +10,6 @@ class DioClient {
   DioClient({this.authViewModel}) {
     _dio.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: Duration(seconds: 5),
-      receiveTimeout: Duration(seconds: 3),
     );
 
     _dio.interceptors.add(
