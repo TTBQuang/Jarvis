@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TokenDisplay extends StatelessWidget{
-  const TokenDisplay({super.key});
+class TokenDisplay extends StatelessWidget {
+  const TokenDisplay({super.key, this.token});
+
+  final int? token;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
             ? const Color(0xFF303f52)
@@ -17,7 +18,7 @@ class TokenDisplay extends StatelessWidget{
       child: Row(
         children: [
           Text(
-            '50',
+            token.toString() ?? '50',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

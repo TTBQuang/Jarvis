@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/main.dart';
 import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/home/widget/home_top_app_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
-import 'package:jarvis/view/prompt_library/prompt_library_bottom_sheet.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
-
+import 'package:jarvis/view_model/chat_view_model.dart';
+import 'package:provider/provider.dart';
 import '../../constant.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,10 +14,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chatViewModel = Provider.of<ChatViewModel>(context);
+    final isloading = chatViewModel.isLoading;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
         return MyScaffold(
+          resizeToAvoidBottomInset: true,
           appBar: HomeTopAppBar(isLargeScreen: isLargeScreen),
           body: Center(
             child: Container(
@@ -30,7 +35,13 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 15),
-                      child: MessagesList(isLargeScreen: isLargeScreen),
+                      child: isloading
+                          ? const SizedBox(
+                              height: 50.0,
+                              width: 50.0,
+                              child: Center(child: CircularProgressIndicator()),
+                            )
+                          : MessagesList(isLargeScreen: isLargeScreen),
                     ),
                   ),
                   Padding(

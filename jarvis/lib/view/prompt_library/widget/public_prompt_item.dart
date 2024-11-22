@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/view/prompt_library/widget/send_prompt_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
+import '../../../model/prompt.dart';
+import '../../../view_model/prompt_view_model.dart';
 
 class PublicPromptItem extends StatefulWidget {
-  const PublicPromptItem({super.key});
+  final Prompt prompt;
+
+  const PublicPromptItem({super.key, required this.prompt});
 
   @override
   State<StatefulWidget> createState() => _PublicPromptItemState();
 }
 
 class _PublicPromptItemState extends State<PublicPromptItem> {
-  bool isFavorite = false;
-
-  void toggleFavorite() {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
           onTap: () => _onItemTapped(context),
-          title: const Text(
-            'Public prompt',
-            style: TextStyle(fontSize: 16),
+          title: Text(
+            widget.prompt.title,
+            style: const TextStyle(fontSize: 16),
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            widget.prompt.description,
             overflow: TextOverflow.ellipsis,
           ),
           trailing: IconButton(
             onPressed: toggleFavorite,
             icon: Icon(
-              isFavorite ? Icons.star : Icons.star_border,
-              color: isFavorite ? const Color(0xFFFFD700) : null,
+              widget.prompt.isFavorite ? Icons.star : Icons.star_border,
+              color: widget.prompt.isFavorite ? const Color(0xFFFFD700) : null,
             ),
           ),
           shape: RoundedRectangleBorder(
@@ -44,6 +45,20 @@ class _PublicPromptItemState extends State<PublicPromptItem> {
         const Divider(),
       ],
     );
+  }
+
+  void toggleFavorite() {
+    final promptViewModel = context.read<PromptViewModel>();
+
+    if (widget.prompt.isFavorite) {
+      promptViewModel.removePromptFromFavorites(promptId: widget.prompt.id);
+    } else {
+      promptViewModel.addPromptToFavorites(promptId: widget.prompt.id);
+    }
+
+    setState(() {
+      widget.prompt.isFavorite = !widget.prompt.isFavorite;
+    });
   }
 
   void _onItemTapped(BuildContext context) {
@@ -56,7 +71,7 @@ class _PublicPromptItemState extends State<PublicPromptItem> {
             maxHeight: MediaQuery.of(context).size.height *
                 maxBottomSheetHeightPercentage,
           ),
-          child: const SendPromptBottomSheet(),
+          child: SendPromptBottomSheet(prompt: widget.prompt),
         );
       },
     );

@@ -33,32 +33,35 @@ class _AuthScreenState extends State<AuthScreen> {
       builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
         return MyScaffold(
+          resizeToAvoidBottomInset: false,
           appBar: TopAppBarWithDrawerIcon(isLargeScreen: isLargeScreen),
           body: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: drawerDisplayWidthThreshold,
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  const GoogleSignInButton(),
-                  const SizedBox(height: 15),
-                  const OrDivider(),
-                  const SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: AuthToggle(
-                      currentTab: currentTab,
-                      onToggle: toggleTab,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    const GoogleSignInButton(),
+                    const SizedBox(height: 15),
+                    const OrDivider(),
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: AuthToggle(
+                        currentTab: currentTab,
+                        onToggle: toggleTab,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildTabContent(currentTab),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildTabContent(currentTab),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/view/forgot_password/forgot_password_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:jarvis/view_model/auth_view_model.dart';
+
+import '../../forgot_password/forgot_password_screen.dart';
 
 class SignInTab extends StatelessWidget {
   final Function onTabToggle;
@@ -8,6 +11,9 @@ class SignInTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,8 +25,9 @@ class SignInTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        const TextField(
-          decoration: InputDecoration(
+        TextField(
+          controller: emailController,
+          decoration: const InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
@@ -36,9 +43,10 @@ class SignInTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        const TextField(
+        TextField(
+          controller: passwordController,
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
@@ -60,17 +68,39 @@ class SignInTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        const Center(
-          child: Text(
-            'Thong bao loi',
-            style: TextStyle(color: Colors.red),
-          ),
+        Selector<AuthViewModel, bool>(
+          selector: (context, viewModel) => viewModel.isSigningIn,
+          builder: (context, isLoading, child) {
+            return isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Selector<AuthViewModel, String>(
+                    selector: (context, viewModel) => viewModel.errorMessageSignIn,
+                    builder: (context, errorMessage, child) {
+                      return errorMessage.isNotEmpty
+                          ? Center(
+                              child: Text(
+                                errorMessage,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            )
+                          : const SizedBox.shrink();
+                    },
+                  );
+          },
         ),
         const SizedBox(height: 15),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              final authViewModel = context.read<AuthViewModel>();
+              String email = emailController.text.trim();
+              String password = passwordController.text.trim();
+
+              authViewModel.signInWithEmailAndPassword(email, password);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4b85e9),
               foregroundColor: Colors.white,

@@ -5,12 +5,14 @@ class MyScaffold extends StatelessWidget {
   final PreferredSizeWidget appBar;
   final Widget body;
   final bool isLargeScreen;
+  final bool resizeToAvoidBottomInset;
 
   const MyScaffold({
     super.key,
     required this.appBar,
     required this.body,
     required this.isLargeScreen,
+    required this.resizeToAvoidBottomInset,
   });
 
   @override
@@ -20,6 +22,7 @@ class MyScaffold extends StatelessWidget {
         if (isLargeScreen) HomeDrawer(isLargeScreen: isLargeScreen),
         Expanded(
           child: Scaffold(
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
             appBar: appBar,
             drawer: isLargeScreen ? null : HomeDrawer(isLargeScreen: isLargeScreen),
             body: body,
