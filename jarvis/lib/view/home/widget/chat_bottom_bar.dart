@@ -88,7 +88,8 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+    final chatViewModel = Provider.of<ChatViewModel>(context);
+    final isSending = chatViewModel.isSending;
 
     return Row(
       children: [
@@ -121,16 +122,23 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
             ),
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: _isTextEmpty
-              ? null
-              : () {
-                  chatViewModel.sendMessage(message: _textController.text);
-                  _textController.clear();
-                },
-          color: _isTextEmpty ? Colors.grey : Colors.blue,
-        ),
+        isSending
+            ? const SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            : IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: _isTextEmpty
+                    ? null
+                    : () {
+                        chatViewModel.sendMessage(
+                            message: _textController.text);
+                        _textController.clear();
+                      },
+                color: _isTextEmpty ? Colors.grey : Colors.blue,
+              ),
       ],
     );
   }

@@ -18,6 +18,8 @@ class ChatViewModel extends ChangeNotifier {
   List<ConversationMessage>? conversationMessages = [];
   AssistantId? assistantId = AssistantId.gpt_4o_mini;
   int? token = 10;
+  bool isLoading = false;
+  bool isSending = false;
 
   Future<void> getConversations({
     String? cursor,
@@ -53,6 +55,8 @@ class ChatViewModel extends ChangeNotifier {
 
   Future<void> sendMessage({required String message}) async {
     try {
+      isSending = true;
+      notifyListeners();
       if (conversationId == null) {
         CreateConversationResponse createConversationResponse =
             await chatRepository.createConversation(
@@ -82,6 +86,8 @@ class ChatViewModel extends ChangeNotifier {
         getConversation(
             conversationId: conversationId!, assistantId: assistantId);
       }
+
+      isSending = false;
       notifyListeners();
     } catch (e) {}
   }
@@ -91,14 +97,17 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeConversation(String? conversationId) {
+  void changeConversation(String? conversationId) async {
+    isLoading = true;
+    notifyListeners();
     this.conversationId = conversationId;
     if (conversationId != null) {
-      getConversation(
+      await getConversation(
           conversationId: conversationId!, assistantId: assistantId);
     } else {
       conversationMessages = [];
     }
+    isLoading = false;
     notifyListeners();
   }
 }

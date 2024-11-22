@@ -263,6 +263,7 @@ class _NewPromptBottomSheetState extends State<NewPromptBottomSheet> {
                         language: selectedLanguage.name,
                         title: nameController.text,
                       );
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4b85e9),
