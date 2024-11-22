@@ -84,6 +84,7 @@ class _MyAppState extends State<MyApp> {
                 : FThemes.blue.light,
             child: child!);
       },
+      debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
   }

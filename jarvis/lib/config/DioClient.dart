@@ -51,9 +51,11 @@ class DioClient {
 
   Future<void> _refreshTokenFunction() async {
     try {
-      final response = await _dio.post(
-        '/auth/refresh',
-        data: {'refresh_token': authViewModel?.user.userToken?.refreshToken},
+      final response = await _dio.get(
+        '/api/v1/auth/refresh',
+        queryParameters: {
+          'refresh_token': authViewModel?.user.userToken?.refreshToken
+        },
       );
 
       authViewModel?.user.userToken?.accessToken =
