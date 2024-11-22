@@ -89,7 +89,11 @@ class ChatViewModel extends ChangeNotifier {
 
       isSending = false;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      isSending = false;
+      notifyListeners();
+    }
   }
 
   void changeAssistant(AssistantId assistantId) {
