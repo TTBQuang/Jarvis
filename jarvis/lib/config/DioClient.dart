@@ -9,7 +9,7 @@ class DioClient {
 
   DioClient({this.authViewModel}) {
     _dio.options = BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: baseUrlJarvis,
     );
 
     _dio.interceptors.add(

@@ -32,7 +32,7 @@ class PromptRepository {
           : 'Bearer ${user.userToken?.accessToken}',
     };
 
-    Uri uri = Uri.parse('$baseUrl/api/v1/prompts').replace(
+    Uri uri = Uri.parse('$baseUrlJarvis/api/v1/prompts').replace(
       queryParameters: {
         if (query != null) 'query': query,
         if (offset != null) 'offset': offset.toString(),
@@ -71,7 +71,7 @@ class PromptRepository {
           : 'Bearer ${user.userToken?.accessToken}',
     };
     var request = http.Request(
-        'POST', Uri.parse('$baseUrl/api/v1/prompts/$promptId/favorite'));
+        'POST', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId/favorite'));
 
     request.headers.addAll(headers);
 
@@ -97,7 +97,7 @@ class PromptRepository {
           : 'Bearer ${user.userToken?.accessToken}',
     };
     var request = http.Request(
-        'DELETE', Uri.parse('$baseUrl/api/v1/prompts/$promptId/favorite'));
+        'DELETE', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId/favorite'));
 
     request.headers.addAll(headers);
 
@@ -123,7 +123,7 @@ class PromptRepository {
           : 'Bearer ${user.userToken?.accessToken}',
     };
     var request =
-        http.Request('DELETE', Uri.parse('$baseUrl/api/v1/prompts/$promptId'));
+        http.Request('DELETE', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId'));
 
     request.headers.addAll(headers);
 
@@ -151,7 +151,7 @@ class PromptRepository {
     };
 
     var request = http.Request(
-        'PATCH', Uri.parse('$baseUrl/api/v1/prompts/${prompt.id}'));
+        'PATCH', Uri.parse('$baseUrlJarvis/api/v1/prompts/${prompt.id}'));
 
     request.body = json.encode({
       "title": prompt.title,

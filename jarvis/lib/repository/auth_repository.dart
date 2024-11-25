@@ -14,7 +14,7 @@ class AuthRepository {
       'Content-Type': 'application/json'
     };
     var request =
-        http.Request('POST', Uri.parse('$baseUrl/api/v1/auth/sign-in'));
+        http.Request('POST', Uri.parse('$baseUrlJarvis/api/v1/auth/sign-in'));
     request.body = json.encode({
       "email": email,
       "password": password,
@@ -39,7 +39,7 @@ class AuthRepository {
       'Content-Type': 'application/json'
     };
     var request =
-        http.Request('POST', Uri.parse('$baseUrl/api/v1/auth/sign-up'));
+        http.Request('POST', Uri.parse('$baseUrlJarvis/api/v1/auth/sign-up'));
     request.body = json.encode({
       "email": email,
       "password": password,
@@ -60,7 +60,7 @@ class AuthRepository {
       'Authorization': 'Bearer $token',
     };
     var request =
-        http.Request('GET', Uri.parse('$baseUrl/api/v1/auth/sign-out'));
+        http.Request('GET', Uri.parse('$baseUrlJarvis/api/v1/auth/sign-out'));
 
     request.headers.addAll(headers);
 
@@ -80,7 +80,7 @@ class AuthRepository {
         'Authorization': 'Bearer $token',
       };
       var request =
-          http.MultipartRequest('GET', Uri.parse('$baseUrl/api/v1/auth/me'));
+          http.MultipartRequest('GET', Uri.parse('$baseUrlJarvis/api/v1/auth/me'));
 
       request.headers.addAll(headers);
 
@@ -108,7 +108,7 @@ class AuthRepository {
     var request = http.Request(
       'GET',
       Uri.parse(
-          '$baseUrl/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshToken}'),
+          '$baseUrlJarvis/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshToken}'),
     );
 
     request.headers.addAll(headers);
