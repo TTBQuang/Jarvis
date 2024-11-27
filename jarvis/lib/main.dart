@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/repository/auth_repository.dart';
 import 'package:jarvis/repository/pricing_repository.dart';
@@ -14,6 +15,9 @@ import 'package:jarvis/view/home/home_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   final AuthRepository authRepository = AuthRepository();
   final authViewModel = AuthViewModel(authRepository);
 

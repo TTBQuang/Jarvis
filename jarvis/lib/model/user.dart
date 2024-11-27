@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:jarvis/model/user_info.dart';
 import 'package:jarvis/model/user_token.dart';
 import 'package:uuid/uuid.dart';
@@ -12,6 +13,6 @@ class User {
     this.userInfo,
   }) {
     userUuid = const Uuid().v4();
-    print(userUuid);
+    debugPrint(userUuid);
   }
 }

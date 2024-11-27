@@ -66,11 +66,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           fetchPublicPrompt(
               query: query,
@@ -123,11 +123,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           fetchPrivatePrompts(
               query: query,
@@ -153,11 +153,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           addPromptToFavorites(promptId: promptId);
         }
@@ -175,11 +175,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           removePromptFromFavorites(promptId: promptId);
         }
@@ -205,11 +205,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           deletePrompt(promptId: promptId);
         }
@@ -235,11 +235,11 @@ class PromptViewModel extends ChangeNotifier {
       print(e.toString());
       if (e.toString().contains('Unauthorized') &&
           authViewModel.user.userToken != null) {
-        String accessToken = await authRepository.refreshToken(
+        String accessTokenJarvis = await authRepository.refreshToken(
           authViewModel.user,
         );
-        if (accessToken.isNotEmpty) {
-          authViewModel.user.userToken?.accessToken = accessToken;
+        if (accessTokenJarvis.isNotEmpty) {
+          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
           notifyListeners();
           updatePrompt(prompt);
         }

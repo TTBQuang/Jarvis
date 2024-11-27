@@ -108,7 +108,7 @@ class AuthRepository {
     var request = http.Request(
       'GET',
       Uri.parse(
-          '$baseUrlJarvis/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshToken}'),
+          '$baseUrlJarvis/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshTokenJarvis}'),
     );
 
     request.headers.addAll(headers);

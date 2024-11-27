@@ -31,7 +31,7 @@ class AuthViewModel extends ChangeNotifier {
 
       if (userToken != null) {
         UserInfo? userInfo =
-            await _authRepository.getUserInfo(userToken.accessToken);
+            await _authRepository.getUserInfo(userToken.accessTokenJarvis);
         if (userInfo != null) {
           user = User(userToken: userToken, userInfo: userInfo);
         }
@@ -85,7 +85,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut(user.userToken?.accessToken ?? '');
+    await _authRepository.signOut(user.userToken?.accessTokenJarvis ?? '');
     user = User();
     notifyListeners();
   }
