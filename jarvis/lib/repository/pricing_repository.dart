@@ -9,10 +9,10 @@ import '../model/user.dart';
 class PricingRepository {
   Future<Subscription> fetchSubscription(User user) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
     };
 
     var request = http.Request('GET', Uri.parse('$baseUrlJarvis/api/v1/subscriptions/me'));

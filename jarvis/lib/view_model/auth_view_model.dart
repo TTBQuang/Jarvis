@@ -13,8 +13,7 @@ class AuthViewModel extends ChangeNotifier {
   String errorMessageSignIn = '';
   String errorMessageSignUp = '';
 
-
-  AuthViewModel(this._authRepository){
+  AuthViewModel(this._authRepository) {
     user = User();
   }
 
@@ -24,18 +23,22 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      UserToken? userToken =
+      TokenJarvis? tokenJarvis =
           await _authRepository.signInWithEmailAndPassword(email, password);
+      TokenKb? tokenKb = await _authRepository
+          .signInFromExternalClient(tokenJarvis?.accessToken ?? '');
 
-      isSigningIn = false;
-
-      if (userToken != null) {
+      if (tokenJarvis != null && tokenKb != null) {
         UserInfo? userInfo =
-            await _authRepository.getUserInfo(userToken.accessTokenJarvis);
+            await _authRepository.getUserInfo(tokenJarvis.accessToken);
         if (userInfo != null) {
-          user = User(userToken: userToken, userInfo: userInfo);
+          user = User(
+            userToken: UserToken(tokenJarvis: tokenJarvis, tokenKb: tokenKb),
+            userInfo: userInfo,
+          );
         }
       }
+      isSigningIn = false;
       notifyListeners();
     } catch (e) {
       isSigningIn = false;
@@ -51,7 +54,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     // Validate email format using RegExp
-    RegExp emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    RegExp emailRegExp =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!emailRegExp.hasMatch(email)) {
       errorMessageSignUp = 'Invalid email format';
       isSigningUp = false;
@@ -62,7 +66,8 @@ class AuthViewModel extends ChangeNotifier {
     // Validate password: At least 6 characters, 1 uppercase letter, 1 number, and 1 special character
     RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$');
     if (!passwordRegExp.hasMatch(password)) {
-      errorMessageSignUp = 'Password must be at least 6 characters long, and include at least '
+      errorMessageSignUp =
+          'Password must be at least 6 characters long, and include at least '
           'one uppercase letter, one number, and one special character.';
       isSigningUp = false;
       notifyListeners();
@@ -85,7 +90,8 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut(user.userToken?.accessTokenJarvis ?? '');
+    await _authRepository
+        .signOut(user.userToken?.tokenJarvis.accessToken ?? '');
     user = User();
     notifyListeners();
   }

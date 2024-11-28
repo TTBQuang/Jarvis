@@ -7,12 +7,9 @@ import 'package:jarvis/model/user_token.dart';
 import '../model/user.dart';
 
 class AuthRepository {
-  Future<UserToken?> signInWithEmailAndPassword(
+  Future<TokenJarvis?> signInWithEmailAndPassword(
       String email, String password) async {
-    var headers = {
-      'x-jarvis-guid': '',
-      'Content-Type': 'application/json'
-    };
+    var headers = {'x-jarvis-guid': '', 'Content-Type': 'application/json'};
     var request =
         http.Request('POST', Uri.parse('$baseUrlJarvis/api/v1/auth/sign-in'));
     request.body = json.encode({
@@ -26,7 +23,7 @@ class AuthRepository {
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseBody);
-      return UserToken.fromJson(jsonResponse);
+      return TokenJarvis.fromJson(jsonResponse);
     } else {
       throw Exception(response.reasonPhrase);
     }
@@ -34,10 +31,7 @@ class AuthRepository {
 
   Future<void> signUpWithEmailAndPassword(
       String email, String password, String username) async {
-    var headers = {
-      'x-jarvis-guid': '',
-      'Content-Type': 'application/json'
-    };
+    var headers = {'x-jarvis-guid': '', 'Content-Type': 'application/json'};
     var request =
         http.Request('POST', Uri.parse('$baseUrlJarvis/api/v1/auth/sign-up'));
     request.body = json.encode({
@@ -79,8 +73,8 @@ class AuthRepository {
         'x-jarvis-guid': '',
         'Authorization': 'Bearer $token',
       };
-      var request =
-          http.MultipartRequest('GET', Uri.parse('$baseUrlJarvis/api/v1/auth/me'));
+      var request = http.MultipartRequest(
+          'GET', Uri.parse('$baseUrlJarvis/api/v1/auth/me'));
 
       request.headers.addAll(headers);
 
@@ -108,7 +102,7 @@ class AuthRepository {
     var request = http.Request(
       'GET',
       Uri.parse(
-          '$baseUrlJarvis/api/v1/auth/refresh?refreshToken=${user.userToken?.refreshTokenJarvis}'),
+          '$baseUrlJarvis/api/v1/auth/refresh?refreshToken=${user.userToken?.tokenJarvis.refreshToken}'),
     );
 
     request.headers.addAll(headers);
@@ -123,6 +117,25 @@ class AuthRepository {
     } else {
       print(response.statusCode);
       return '';
+    }
+  }
+
+  Future<TokenKb?> signInFromExternalClient(String accessTokenJarvis) async {
+    var headers = {'x-jarvis-guid': '', 'Content-Type': 'application/json'};
+    var request = http.Request(
+        'POST', Uri.parse('$baseUrlKb/kb-core/v1/auth/external-sign-in'));
+    request.body = json.encode({"token": accessTokenJarvis});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      var jsonResponse = json.decode(responseBody);
+      return TokenKb.fromJson(jsonResponse);
+    } else {
+      print(response.statusCode);
+      throw Exception(response.reasonPhrase);
     }
   }
 }

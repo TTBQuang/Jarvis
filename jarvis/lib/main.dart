@@ -3,11 +3,13 @@ import 'package:forui/forui.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/repository/auth_repository.dart';
+import 'package:jarvis/repository/knowledge_repository.dart';
 import 'package:jarvis/repository/pricing_repository.dart';
 import 'package:jarvis/repository/prompt_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
+import 'package:jarvis/view_model/knowledge_view_model.dart';
 import 'package:jarvis/view_model/pricing_view_model.dart';
 import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +48,14 @@ void main() {
             )..fetchSubscription();
           },
         ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return KnowledgeViewModel(
+              authViewModel: authViewModel,
+              knowledgeRepository: KnowledgeRepository(),
+            )..fetchKnowledgeList();
+          },
+        ),
       ],
       child: const MyApp(),
     ),
@@ -69,8 +79,8 @@ class _MyAppState extends State<MyApp> {
       final chatViewModel = context.read<ChatViewModel>();
       final promptsViewModel = context.read<PromptViewModel>();
       chatViewModel.getConversations();
-      promptsViewModel.fetchPrivatePrompts(limit: defaultLimit);
-      promptsViewModel.fetchPublicPrompt(limit: defaultLimit);
+      promptsViewModel.fetchPrivatePrompts(limit: defaultLimitPrompt);
+      promptsViewModel.fetchPublicPrompt(limit: defaultLimitPrompt);
     });
   }
 

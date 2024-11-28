@@ -47,8 +47,8 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
 
     await viewModel.fetchPublicPrompt(
       category: selectedCategory == Category.all ? null : selectedCategory,
-      offset: resetOffset ? 0 : currentOffset + defaultLimit,
-      limit: defaultLimit,
+      offset: resetOffset ? 0 : currentOffset + defaultLimitPrompt,
+      limit: defaultLimitPrompt,
       isFavorite: isFavorite ? true : null,
       query: searchQueryController.text.isNotEmpty
           ? searchQueryController.text

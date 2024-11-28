@@ -70,7 +70,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           fetchPublicPrompt(
               query: query,
@@ -127,7 +127,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           fetchPrivatePrompts(
               query: query,
@@ -157,7 +157,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           addPromptToFavorites(promptId: promptId);
         }
@@ -179,7 +179,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           removePromptFromFavorites(promptId: promptId);
         }
@@ -209,7 +209,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           deletePrompt(promptId: promptId);
         }
@@ -239,7 +239,7 @@ class PromptViewModel extends ChangeNotifier {
           authViewModel.user,
         );
         if (accessTokenJarvis.isNotEmpty) {
-          authViewModel.user.userToken?.accessTokenJarvis = accessTokenJarvis;
+          authViewModel.user.userToken?.tokenJarvis.accessToken = accessTokenJarvis;
           notifyListeners();
           updatePrompt(prompt);
         }
@@ -271,8 +271,8 @@ class PromptViewModel extends ChangeNotifier {
   void changePromptType(PromptType type) {
     this.currentType = type;
     type == PromptType.public
-        ? fetchPublicPrompt(limit: defaultLimit)
-        : fetchPrivatePrompts(limit: defaultLimit);
+        ? fetchPublicPrompt(limit: defaultLimitPrompt)
+        : fetchPrivatePrompts(limit: defaultLimitPrompt);
     notifyListeners();
   }
 }

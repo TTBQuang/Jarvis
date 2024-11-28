@@ -41,8 +41,8 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
     final currentOffset = viewModel.privatePromptList?.offset ?? 0;
 
     await viewModel.fetchPrivatePrompts(
-      offset: resetOffset ? 0 : currentOffset + defaultLimit,
-      limit: defaultLimit,
+      offset: resetOffset ? 0 : currentOffset + defaultLimitPrompt,
+      limit: defaultLimitPrompt,
       query: searchQueryController.text.isNotEmpty
           ? searchQueryController.text
           : null,

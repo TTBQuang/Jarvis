@@ -1,18 +1,49 @@
 class UserToken {
-  String accessTokenJarvis;
-  String refreshTokenJarvis;
+  TokenJarvis tokenJarvis;
+  TokenKb tokenKb;
 
   UserToken({
-    this.accessTokenJarvis = '',
-    this.refreshTokenJarvis = '',
+    required this.tokenJarvis,
+    required this.tokenKb,
   });
 
-  factory UserToken.fromJson(Map<String, dynamic> json) {
-    final tokenData = json['token'] ?? {};
-
+  UserToken copyWith({
+    TokenJarvis? tokenJarvis,
+    TokenKb? tokenKb,
+  }) {
     return UserToken(
-      accessTokenJarvis: tokenData['accessToken'] ?? '',
-      refreshTokenJarvis: tokenData['refreshToken'] ?? '',
+      tokenJarvis: tokenJarvis ?? this.tokenJarvis,
+      tokenKb: tokenKb ?? this.tokenKb,
+    );
+  }
+}
+
+class TokenJarvis {
+  String accessToken;
+  String refreshToken;
+
+  TokenJarvis(this.accessToken, this.refreshToken);
+
+  factory TokenJarvis.fromJson(Map<String, dynamic> json) {
+    final token = json['token'];
+    return TokenJarvis(
+      token['accessToken'] ?? '',
+      token['refreshToken'] ?? '',
+    );
+  }
+}
+
+class TokenKb {
+  String accessToken;
+  String refreshToken;
+
+  TokenKb(this.accessToken, this.refreshToken);
+
+  factory TokenKb.fromJson(Map<String, dynamic> json) {
+    final token = json['token'];
+    return TokenKb(
+      token['accessToken'] ?? '',
+      token['refreshToken'] ?? '',
     );
   }
 }

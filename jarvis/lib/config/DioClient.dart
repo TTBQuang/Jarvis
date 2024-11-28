@@ -16,11 +16,11 @@ class DioClient {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           options.headers['x-jarvis-guid'] =
-              authViewModel?.user.userToken?.accessTokenJarvis == null
+              authViewModel?.user.userToken?.tokenJarvis.accessToken == null
                   ? authViewModel?.user.userUuid
                   : '';
           options.headers['Authorization'] =
-              'Bearer ${authViewModel?.user.userToken?.accessTokenJarvis}';
+              'Bearer ${authViewModel?.user.userToken?.tokenJarvis.accessToken}';
           return handler.next(options);
         },
         onError: (DioError error, handler) async {
@@ -33,7 +33,7 @@ class DioClient {
               // Gửi lại request với token mới
               final options = error.requestOptions;
               options.headers['Authorization'] =
-                  'Bearer ${authViewModel?.user.userToken?.accessTokenJarvis}';
+                  'Bearer ${authViewModel?.user.userToken?.tokenJarvis.accessToken}';
 
               final response = await _dio.fetch(options);
               return handler.resolve(response);
@@ -54,11 +54,11 @@ class DioClient {
       final response = await _dio.get(
         '/api/v1/auth/refresh',
         queryParameters: {
-          'refresh_token': authViewModel?.user.userToken?.refreshTokenJarvis
+          'refresh_token': authViewModel?.user.userToken?.tokenJarvis.refreshToken
         },
       );
 
-      authViewModel?.user.userToken?.accessTokenJarvis =
+      authViewModel?.user.userToken?.tokenJarvis.accessToken =
           response.data['access_token'];
     } catch (e) {
       throw Exception('Failed to refresh token');

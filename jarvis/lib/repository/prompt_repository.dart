@@ -26,10 +26,10 @@ class PromptRepository {
     required User user,
   }) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
     };
 
     Uri uri = Uri.parse('$baseUrlJarvis/api/v1/prompts').replace(
@@ -65,10 +65,10 @@ class PromptRepository {
     required User user,
   }) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
     };
     var request = http.Request(
         'POST', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId/favorite'));
@@ -91,10 +91,10 @@ class PromptRepository {
     required User user,
   }) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
     };
     var request = http.Request(
         'DELETE', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId/favorite'));
@@ -117,10 +117,10 @@ class PromptRepository {
     required User user,
   }) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
     };
     var request =
         http.Request('DELETE', Uri.parse('$baseUrlJarvis/api/v1/prompts/$promptId'));
@@ -143,10 +143,10 @@ class PromptRepository {
     required Prompt prompt,
   }) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.accessTokenJarvis == null ? user.userUuid : '',
-      'Authorization': user.userToken?.accessTokenJarvis == null
+      'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenJarvis.accessToken == null
           ? ''
-          : 'Bearer ${user.userToken?.accessTokenJarvis}',
+          : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
       'Content-Type': 'application/json'
     };
 
