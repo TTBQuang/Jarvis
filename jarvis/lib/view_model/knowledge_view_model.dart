@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/knowledge.dart';
 import 'package:jarvis/model/knowledge_list.dart';
+import 'package:jarvis/model/knowledge_unit_list.dart';
 
 import '../constant.dart';
 import '../repository/knowledge_repository.dart';
@@ -11,7 +12,12 @@ class KnowledgeViewModel extends ChangeNotifier {
   final AuthViewModel authViewModel;
 
   KnowledgeList? knowledgeList;
-  bool isFetching = false;
+  bool isFetchingKnowledgeList = false;
+
+  KnowledgeUnitList? knowledgeUnitList;
+  bool isFetchingKnowledgeUnitList = false;
+
+  bool isUploadingFile = false;
 
   KnowledgeViewModel(
       {required this.knowledgeRepository, required this.authViewModel});
@@ -33,8 +39,10 @@ class KnowledgeViewModel extends ChangeNotifier {
 
   Future<void> fetchKnowledgeList(
       {int offset = 0, int limit = defaultLimitKb, String query = ''}) async {
-    if (isFetching) return;
-    isFetching = true;
+    if (isFetchingKnowledgeList) return;
+    isFetchingKnowledgeList = true;
+
+    notifyListeners();
 
     try {
       final fetchedList = await knowledgeRepository.fetchKnowledgeList(
@@ -50,11 +58,11 @@ class KnowledgeViewModel extends ChangeNotifier {
         knowledgeList?.data.addAll(fetchedList.data);
         knowledgeList?.meta = fetchedList.meta;
       }
-      notifyListeners();
     } catch (e) {
       print(e);
     } finally {
-      isFetching = false;
+      isFetchingKnowledgeList = false;
+      notifyListeners();
     }
   }
 
@@ -68,6 +76,52 @@ class KnowledgeViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> fetchKnowledgeUnitList(
+      {int offset = 0,
+      int limit = defaultLimitKb,
+      required String knowledgeId}) async {
+    if (isFetchingKnowledgeUnitList) return;
+    isFetchingKnowledgeUnitList = true;
+    notifyListeners();
+
+    try {
+      final fetchedList = await knowledgeRepository.fetchKnowledgeUnitList(
+        user: authViewModel.user,
+        knowledgeId: knowledgeId,
+        offset: offset,
+        limit: limit,
+      );
+      if (knowledgeList == null || fetchedList.meta.offset == 0) {
+        knowledgeUnitList = fetchedList;
+      } else {
+        knowledgeUnitList?.data.addAll(fetchedList.data);
+        knowledgeUnitList?.meta = fetchedList.meta;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isFetchingKnowledgeUnitList = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadLocalFile(
+      {required String knowledgeId, required String path}) async {
+    try {
+      isUploadingFile = true;
+      notifyListeners();
+
+      final unit = await knowledgeRepository.uploadLocalFile(
+          user: authViewModel.user, knowledgeId: knowledgeId, path: path);
+      knowledgeUnitList?.data.add(unit);
+    } catch (e) {
+      print(e);
+    } finally {
+      isUploadingFile = false;
+      notifyListeners();
     }
   }
 }

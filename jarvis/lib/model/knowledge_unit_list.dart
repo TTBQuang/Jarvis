@@ -1,24 +1,23 @@
 import 'package:jarvis/model/pagination_meta.dart';
 
-import 'knowledge.dart';
+import 'knowledge_unit.dart';
 
-class KnowledgeList {
-  List<Knowledge> data;
+class KnowledgeUnitList {
+  List<KnowledgeUnit> data;
   PaginationMeta meta;
 
-  KnowledgeList({
+  KnowledgeUnitList({
     required this.data,
     required this.meta,
   });
 
-  factory KnowledgeList.fromJson(Map<String, dynamic> json) {
-    return KnowledgeList(
+  factory KnowledgeUnitList.fromJson(Map<String, dynamic> json) {
+    return KnowledgeUnitList(
       data: (json['data'] as List<dynamic>?)
-              ?.map((item) => Knowledge.fromJson(item))
+              ?.map((item) => KnowledgeUnit.fromJson(item))
               .toList() ??
           [],
       meta: PaginationMeta.fromJson(json['meta'] ?? {}),
     );
   }
 }
-

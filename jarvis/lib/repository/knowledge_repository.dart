@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/knowledge.dart';
 import 'package:jarvis/model/knowledge_list.dart';
+import 'package:jarvis/model/knowledge_unit.dart';
+import 'package:jarvis/model/knowledge_unit_list.dart';
+import 'package:mime/mime.dart';
 
 import '../model/user.dart';
 
@@ -74,8 +79,7 @@ class KnowledgeRepository {
     }
   }
 
-  Future<void> deleteKnowledge(
-      {required User user, required String id}) async {
+  Future<void> deleteKnowledge({required User user, required String id}) async {
     var headers = {
       'x-jarvis-guid':
           user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
@@ -83,7 +87,8 @@ class KnowledgeRepository {
           ? ''
           : 'Bearer ${user.userToken?.tokenKb.accessToken}',
     };
-    var request = http.Request('DELETE', Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$id'));
+    var request = http.Request(
+        'DELETE', Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$id'));
 
     request.headers.addAll(headers);
 
@@ -93,6 +98,83 @@ class KnowledgeRepository {
       print(await response.stream.bytesToString());
     } else {
       print(response.statusCode);
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<KnowledgeUnitList> fetchKnowledgeUnitList(
+      {required User user,
+      required int offset,
+      required int limit,
+      required String knowledgeId}) async {
+    var headers = {
+      'x-jarvis-guid':
+          user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+    };
+
+    var uri = Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/units')
+        .replace(queryParameters: {
+      'order': 'DESC',
+      'order_field': 'createdAt',
+      'offset': '0',
+      'limit': '20',
+    });
+    var request = http.Request('GET', uri);
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnitList.fromJson(jsonData);
+    } else {
+      print(response.statusCode);
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<KnowledgeUnit> uploadLocalFile(
+      {required User user,
+        required String path,
+        required String knowledgeId}) async {
+
+    var headers = {
+      'x-jarvis-guid': user.userToken?.tokenKb.accessToken == null
+          ? user.userUuid
+          : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    final uri = Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/local-file');
+
+    final mimeType = lookupMimeType(path) ?? 'application/octet-stream';
+
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath(
+        'file',
+        path,
+        contentType: MediaType.parse(mimeType),
+      ));
+
+    request.headers.addAll(headers);
+
+    final response = await request.send();
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnit.fromJson(jsonData);
+    } else {
+      String responseBody = await response.stream.bytesToString();
+      print('File upload failed: ${response.statusCode}');
+      print('Response body: $responseBody');
       throw Exception(response.reasonPhrase);
     }
   }

@@ -105,6 +105,12 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
             ),
             Consumer<KnowledgeViewModel>(
               builder: (context, viewModel, child) {
+                if (viewModel.isFetchingKnowledgeList) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
                 if (viewModel.knowledgeList == null ||
                     viewModel.knowledgeList!.data.isEmpty) {
                   return const Center(
@@ -138,7 +144,7 @@ class _KnowledgeScreenState extends State<KnowledgeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const KnowledgeDetailScreen(),
+                                    KnowledgeDetailScreen(knowledge!),
                               ),
                             );
                           },
