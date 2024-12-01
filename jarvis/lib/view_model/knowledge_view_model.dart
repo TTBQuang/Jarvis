@@ -18,6 +18,7 @@ class KnowledgeViewModel extends ChangeNotifier {
   bool isFetchingKnowledgeUnitList = false;
 
   bool isUploadingFile = false;
+  bool isUploadingSuccess = true;
 
   KnowledgeViewModel(
       {required this.knowledgeRepository, required this.authViewModel});
@@ -112,12 +113,95 @@ class KnowledgeViewModel extends ChangeNotifier {
       {required String knowledgeId, required String path}) async {
     try {
       isUploadingFile = true;
+      isUploadingSuccess = true;
       notifyListeners();
 
       final unit = await knowledgeRepository.uploadLocalFile(
           user: authViewModel.user, knowledgeId: knowledgeId, path: path);
       knowledgeUnitList?.data.add(unit);
     } catch (e) {
+      isUploadingSuccess = false;
+      print(e);
+    } finally {
+      isUploadingFile = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadWebsite(
+      {required String webUrl,
+      required String unitName,
+      required String knowledgeId}) async {
+    try {
+      print('webUrl: $webUrl, unitName: $unitName, knowledgeId: $knowledgeId');
+      isUploadingFile = true;
+      isUploadingSuccess = true;
+      notifyListeners();
+
+      final unit = await knowledgeRepository.uploadWebsite(
+          user: authViewModel.user,
+          knowledgeId: knowledgeId,
+          webUrl: webUrl,
+          unitName: unitName);
+      knowledgeUnitList?.data.add(unit);
+    } catch (e) {
+      isUploadingSuccess = false;
+      print(e);
+    } finally {
+      isUploadingFile = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadDataFromSlack(
+      {required String name,
+      required String workspace,
+      required String token,
+      required String knowledgeId}) async {
+    try {
+      print('name: $name, workspace: $workspace, token: $token');
+      isUploadingFile = true;
+      isUploadingSuccess = true;
+      notifyListeners();
+
+      final unit = await knowledgeRepository.uploadDataFromSlack(
+          user: authViewModel.user,
+          knowledgeId: knowledgeId,
+          name: name,
+          workspace: workspace,
+          token: token);
+      knowledgeUnitList?.data.add(unit);
+    } catch (e) {
+      isUploadingSuccess = false;
+      print(e);
+    } finally {
+      isUploadingFile = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadDataFromConfluence(
+      {required String name,
+      required String wikiPageUrl,
+      required String username,
+      required String accessToken,
+      required String knowledgeId}) async {
+    try {
+      print('name: $name, wikiPageUrl: $wikiPageUrl, username: $username, accessToken: $accessToken');
+      isUploadingFile = true;
+      isUploadingSuccess = true;
+      notifyListeners();
+
+      final unit = await knowledgeRepository.uploadDataFromConfluence(
+          user: authViewModel.user,
+          knowledgeId: knowledgeId,
+          name: name,
+          wikiPageUrl: wikiPageUrl,
+          username: username,
+          accessToken: accessToken);
+      knowledgeUnitList?.data.add(unit);
+    } catch (e) {
+      isUploadingSuccess = false;
       print(e);
     } finally {
       isUploadingFile = false;

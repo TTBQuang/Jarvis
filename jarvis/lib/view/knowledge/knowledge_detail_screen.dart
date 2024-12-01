@@ -144,6 +144,19 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                   ),
                 ],
               ),
+              Consumer<KnowledgeViewModel>(
+                  builder: (context, viewModel, child) {
+                if (viewModel.isUploadingSuccess) {
+                  return const SizedBox.shrink();
+                } else {
+                  return const Center(
+                    child: Text(
+                      'Failed to upload',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+              }),
               Expanded(
                 child: Consumer<KnowledgeViewModel>(
                     builder: (context, viewModel, child) {

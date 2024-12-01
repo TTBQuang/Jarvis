@@ -140,20 +140,19 @@ class KnowledgeRepository {
 
   Future<KnowledgeUnit> uploadLocalFile(
       {required User user,
-        required String path,
-        required String knowledgeId}) async {
-
+      required String path,
+      required String knowledgeId}) async {
     var headers = {
-      'x-jarvis-guid': user.userToken?.tokenKb.accessToken == null
-          ? user.userUuid
-          : '',
+      'x-jarvis-guid':
+          user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
       'Authorization': user.userToken?.tokenKb.accessToken == null
           ? ''
           : 'Bearer ${user.userToken?.tokenKb.accessToken}',
       'Content-Type': 'multipart/form-data',
     };
 
-    final uri = Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/local-file');
+    final uri =
+        Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/local-file');
 
     final mimeType = lookupMimeType(path) ?? 'application/octet-stream';
 
@@ -167,6 +166,114 @@ class KnowledgeRepository {
     request.headers.addAll(headers);
 
     final response = await request.send();
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnit.fromJson(jsonData);
+    } else {
+      String responseBody = await response.stream.bytesToString();
+      print('File upload failed: ${response.statusCode}');
+      print('Response body: $responseBody');
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<KnowledgeUnit> uploadWebsite(
+      {required User user,
+      required String webUrl,
+      required String unitName,
+      required String knowledgeId}) async {
+    var headers = {
+      'x-jarvis-guid':
+          user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/web'));
+    request.body = json.encode({"unitName": unitName, "webUrl": webUrl});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnit.fromJson(jsonData);
+    } else {
+      String responseBody = await response.stream.bytesToString();
+      print('File upload failed: ${response.statusCode}');
+      print('Response body: $responseBody');
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<KnowledgeUnit> uploadDataFromSlack(
+      {required User user,
+        required String name,
+        required String workspace,
+        required String token,
+        required String knowledgeId}
+      ) async {
+    var headers = {
+      'x-jarvis-guid':
+      user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/slack'));
+    request.body = json.encode({
+      "unitName": name,
+      "slackWorkspace": workspace,
+      "slackBotToken": token,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnit.fromJson(jsonData);
+    } else {
+      String responseBody = await response.stream.bytesToString();
+      print('File upload failed: ${response.statusCode}');
+      print('Response body: $responseBody');
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<KnowledgeUnit> uploadDataFromConfluence(
+      {required User user,
+        required String name,
+        required String wikiPageUrl,
+        required String username,
+        required String accessToken,
+        required String knowledgeId}
+      ) async {
+    var headers = {
+      'x-jarvis-guid':
+      user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/confluence'));
+    request.body = json.encode({
+      "unitName": name,
+      "wikiPageUrl": wikiPageUrl,
+      "confluenceUsername": username,
+      "confluenceAccessToken": accessToken,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
     if (response.statusCode == 201) {
       String responseBody = await response.stream.bytesToString();
       Map<String, dynamic> jsonData = jsonDecode(responseBody);

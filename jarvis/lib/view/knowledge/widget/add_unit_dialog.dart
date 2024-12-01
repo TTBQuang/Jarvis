@@ -2,6 +2,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/model/knowledge.dart';
+import 'package:jarvis/view/knowledge/widget/upload_confluence_dialog.dart';
+import 'package:jarvis/view/knowledge/widget/upload_slack_dialog.dart';
+import 'package:jarvis/view/knowledge/widget/upload_website_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/knowledge_view_model.dart';
@@ -101,9 +104,69 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
                   )
                 : const Text('Next'),
             onPress: () async {
-              await handleUpload(context, widget.knowledge.id);
-              if (context.mounted) {
+              if (_selectedUnitType == UnitType.localFile) {
+                await uploadLocalFile(context, widget.knowledge.id);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              } else if (_selectedUnitType == UnitType.website) {
                 Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (context) => UploadWebsiteDialog(
+                    onUpload: (url, name) async {
+                      final knowledgeViewModel =
+                          Provider.of<KnowledgeViewModel>(context,
+                              listen: false);
+
+                      await knowledgeViewModel.uploadWebsite(
+                        webUrl: url,
+                        unitName: name,
+                        knowledgeId: widget.knowledge.id,
+                      );
+                    },
+                  ),
+                );
+              } else if (_selectedUnitType == UnitType.googleDrive) {
+              } else if (_selectedUnitType == UnitType.slack) {
+                Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (context) => UploadSlackDialog(
+                    onUpload: (name, workspace, token) async {
+                      final knowledgeViewModel =
+                          Provider.of<KnowledgeViewModel>(context,
+                              listen: false);
+
+                      await knowledgeViewModel.uploadDataFromSlack(
+                        name: name,
+                        workspace: workspace,
+                        token: token,
+                        knowledgeId: widget.knowledge.id,
+                      );
+                    },
+                  ),
+                );
+              } else if (_selectedUnitType == UnitType.confluence) {
+                Navigator.of(context).pop();
+                showDialog(
+                  context: context,
+                  builder: (context) => UploadConfluenceDialog(
+                    onUpload: (name, wikiPageUrl, username, accessToken) async {
+                      final knowledgeViewModel =
+                          Provider.of<KnowledgeViewModel>(context,
+                              listen: false);
+
+                      await knowledgeViewModel.uploadDataFromConfluence(
+                        name: name,
+                        wikiPageUrl: wikiPageUrl,
+                        username: username,
+                        accessToken: accessToken,
+                        knowledgeId: widget.knowledge.id,
+                      );
+                    },
+                  ),
+                );
               }
             },
           );
@@ -113,21 +176,14 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
   }
 }
 
-Future<String?> pickLocalFile() async {
+Future<void> uploadLocalFile(BuildContext context, String knowledgeId) async {
+  final knowledgeViewModel =
+      Provider.of<KnowledgeViewModel>(context, listen: false);
   final result = await FilePicker.platform.pickFiles(
     type: FileType.any,
   );
 
-  if (result != null && result.files.isNotEmpty) {
-    return result.files.first.path;
-  }
-  return null;
-}
-
-Future<void> handleUpload(BuildContext context, String knowledgeId) async {
-  final knowledgeViewModel =
-      Provider.of<KnowledgeViewModel>(context, listen: false);
-  final filePath = await pickLocalFile();
+  final filePath = result?.files.single.path;
   if (filePath != null) {
     await knowledgeViewModel.uploadLocalFile(
         knowledgeId: knowledgeId, path: filePath);
@@ -135,3 +191,5 @@ Future<void> handleUpload(BuildContext context, String knowledgeId) async {
     print('No file selected');
   }
 }
+
+Future<void> uploadWebsite(BuildContext context, String knowledgeId) async {}
