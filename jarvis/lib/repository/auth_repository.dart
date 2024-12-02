@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/user_info.dart';
@@ -133,6 +135,39 @@ class AuthRepository {
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseBody);
       return TokenKb.fromJson(jsonResponse);
+    } else {
+      print(response.statusCode);
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      serverClientId: '190440784483-jrpsu3r7snkb3imtrp4oga57t48dlfcd.apps.googleusercontent.com',
+    );
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    if (googleUser == null) {
+      print('googleUser == null');
+      return;
+    }
+
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser.authentication;
+
+    log('access: ${googleAuth.accessToken}');
+    log('id: ${googleAuth.idToken}');
+
+    var headers = {'Content-Type': 'application/json'};
+    var request =
+        http.Request('POST', Uri.parse('$baseUrlJarvis/api/v1/auth/google-sign-in'));
+    request.body = json.encode({"token": googleAuth.idToken});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
     } else {
       print(response.statusCode);
       throw Exception(response.reasonPhrase);

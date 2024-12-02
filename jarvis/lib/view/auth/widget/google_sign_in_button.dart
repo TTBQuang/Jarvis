@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../view_model/auth_view_model.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({super.key});
@@ -12,7 +15,10 @@ class GoogleSignInButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        final authViewModel = context.read<AuthViewModel>();
+        authViewModel.signInWithGoogle();
+      },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

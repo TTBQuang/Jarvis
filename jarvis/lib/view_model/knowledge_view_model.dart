@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/knowledge.dart';
 import 'package:jarvis/model/knowledge_list.dart';
@@ -128,12 +130,39 @@ class KnowledgeViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> uploadLocalFileWeb({
+    required String knowledgeId,
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    try {
+      isUploadingFile = true;
+      isUploadingSuccess = true;
+      notifyListeners();
+
+      final unit = await knowledgeRepository.uploadLocalFileWeb(
+        user: authViewModel.user,
+        knowledgeId: knowledgeId,
+        fileName: fileName,
+        bytes: bytes,
+      );
+
+      knowledgeUnitList?.data.add(unit);
+    } catch (e) {
+      isUploadingSuccess = false;
+      print(e);
+    } finally {
+      isUploadingFile = false;
+      notifyListeners();
+    }
+  }
+
+
   Future<void> uploadWebsite(
       {required String webUrl,
       required String unitName,
       required String knowledgeId}) async {
     try {
-      print('webUrl: $webUrl, unitName: $unitName, knowledgeId: $knowledgeId');
       isUploadingFile = true;
       isUploadingSuccess = true;
       notifyListeners();
@@ -187,7 +216,6 @@ class KnowledgeViewModel extends ChangeNotifier {
       required String accessToken,
       required String knowledgeId}) async {
     try {
-      print('name: $name, wikiPageUrl: $wikiPageUrl, username: $username, accessToken: $accessToken');
       isUploadingFile = true;
       isUploadingSuccess = true;
       notifyListeners();

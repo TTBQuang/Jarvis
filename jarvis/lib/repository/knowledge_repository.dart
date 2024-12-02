@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -177,6 +178,49 @@ class KnowledgeRepository {
       throw Exception(response.reasonPhrase);
     }
   }
+
+  Future<KnowledgeUnit> uploadLocalFileWeb({
+    required User user,
+    required String knowledgeId,
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    var headers = {
+      'x-jarvis-guid':
+      user.userToken?.tokenKb.accessToken == null ? user.userUuid : '',
+      'Authorization': user.userToken?.tokenKb.accessToken == null
+          ? ''
+          : 'Bearer ${user.userToken?.tokenKb.accessToken}',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    final uri =
+    Uri.parse('$baseUrlKb/kb-core/v1/knowledge/$knowledgeId/local-file');
+
+    final request = http.MultipartRequest('POST', uri);
+
+    request.files.add(http.MultipartFile.fromBytes(
+      'file',
+      bytes,
+      filename: fileName,
+      contentType: MediaType.parse(lookupMimeType(fileName) ?? 'application/octet-stream'),
+    ));
+
+    request.headers.addAll(headers);
+
+    final response = await request.send();
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> jsonData = jsonDecode(responseBody);
+      return KnowledgeUnit.fromJson(jsonData);
+    } else {
+      String responseBody = await response.stream.bytesToString();
+      print('File upload failed: ${response.statusCode}');
+      print('Response body: $responseBody');
+      throw Exception(response.reasonPhrase);
+    }
+  }
+
 
   Future<KnowledgeUnit> uploadWebsite(
       {required User user,

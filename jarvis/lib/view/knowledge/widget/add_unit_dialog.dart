@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/model/knowledge.dart';
@@ -178,18 +179,31 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
 
 Future<void> uploadLocalFile(BuildContext context, String knowledgeId) async {
   final knowledgeViewModel =
-      Provider.of<KnowledgeViewModel>(context, listen: false);
+  Provider.of<KnowledgeViewModel>(context, listen: false);
   final result = await FilePicker.platform.pickFiles(
     type: FileType.any,
   );
 
-  final filePath = result?.files.single.path;
-  if (filePath != null) {
-    await knowledgeViewModel.uploadLocalFile(
-        knowledgeId: knowledgeId, path: filePath);
+  if (result != null) {
+    if (kIsWeb) {
+      final bytes = result.files.single.bytes;
+      if (bytes != null) {
+        await knowledgeViewModel.uploadLocalFileWeb(
+          knowledgeId: knowledgeId,
+          fileName: result.files.single.name,
+          bytes: bytes,
+        );
+      }
+    } else {
+      final filePath = result.files.single.path;
+      if (filePath != null) {
+        await knowledgeViewModel.uploadLocalFile(
+          knowledgeId: knowledgeId,
+          path: filePath,
+        );
+      }
+    }
   } else {
     print('No file selected');
   }
 }
-
-Future<void> uploadWebsite(BuildContext context, String knowledgeId) async {}

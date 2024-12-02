@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -6,6 +7,7 @@ import 'package:jarvis/repository/auth_repository.dart';
 import 'package:jarvis/repository/knowledge_repository.dart';
 import 'package:jarvis/repository/pricing_repository.dart';
 import 'package:jarvis/repository/prompt_repository.dart';
+import 'package:jarvis/view/home/home_screen.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
@@ -13,10 +15,9 @@ import 'package:jarvis/view_model/knowledge_view_model.dart';
 import 'package:jarvis/view_model/pricing_view_model.dart';
 import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:jarvis/view/home/home_screen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
 
