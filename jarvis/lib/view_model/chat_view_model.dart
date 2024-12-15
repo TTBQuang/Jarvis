@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/chat.dart';
+import 'package:jarvis/model/subscription.dart';
 import 'package:jarvis/repository/chat_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 
@@ -17,7 +18,7 @@ class ChatViewModel extends ChangeNotifier {
   String? conversationId;
   List<ConversationMessage>? conversationMessages = [];
   AssistantId? assistantId = AssistantId.gpt_4o_mini;
-  int? token = 10;
+  int token = 10;
   bool isLoading = false;
   bool isSending = false;
 
@@ -107,11 +108,25 @@ class ChatViewModel extends ChangeNotifier {
     this.conversationId = conversationId;
     if (conversationId != null) {
       await getConversation(
-          conversationId: conversationId!, assistantId: assistantId);
+          conversationId: conversationId, assistantId: assistantId);
     } else {
       conversationMessages = [];
     }
     isLoading = false;
     notifyListeners();
+  }
+
+  void getUsage() async {
+    try {
+      Subscription subscription = await chatRepository.getUsage(authViewModel.user);
+      if (subscription.name == SubscriptionType.basic){
+        token = subscription.dailyTokens;
+      } else {
+        token = -1;
+      }
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

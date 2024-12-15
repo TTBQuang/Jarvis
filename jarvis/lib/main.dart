@@ -38,7 +38,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) {
-            return ChatViewModel(authViewModel: context.read<AuthViewModel>());
+            return ChatViewModel(authViewModel: authViewModel);
           },
         ),
         ChangeNotifierProvider(

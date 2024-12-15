@@ -15,7 +15,6 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final chatViewModel = Provider.of<ChatViewModel>(context);
-    final token = chatViewModel.token;
     final assistantId = chatViewModel.assistantId;
 
     return AppBar(
@@ -74,11 +73,9 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: TokenDisplay(
-              token: token,
-            ),
+          const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: TokenDisplay(),
           ),
         ],
       ),

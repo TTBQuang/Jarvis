@@ -1,7 +1,13 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:jarvis/config/DioClient.dart';
+import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/chat.dart';
+import 'package:jarvis/model/subscription.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
+
+import '../model/user.dart';
 
 class ChatRepository {
   late DioClient dioClient;
@@ -85,6 +91,34 @@ class ChatRepository {
       });
       return SendMessageResponse.fromJson(response.data);
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Subscription> getUsage(User user) async {
+    try {
+      var headers = {
+        'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+        'Authorization': user.userToken?.tokenJarvis.accessToken == null
+            ? ''
+            : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
+      };
+      print(headers);
+      var request = http.Request('GET', Uri.parse('$baseUrlJarvis/api/v1/subscriptions/me'));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        String responseBody = await response.stream.bytesToString();
+        Map<String, dynamic> json = jsonDecode(responseBody);
+        return Subscription.fromJson(json);
+      } else {
+        throw Exception(response.reasonPhrase);
+      }
+    } catch (e) {
+      print(e);
       throw Exception(e);
     }
   }

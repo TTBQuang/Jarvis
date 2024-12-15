@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
 
+import '../../../view_model/chat_view_model.dart';
 import '../../forgot_password/forgot_password_screen.dart';
 
 class SignInTab extends StatelessWidget {
@@ -76,7 +77,8 @@ class SignInTab extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   )
                 : Selector<AuthViewModel, String>(
-                    selector: (context, viewModel) => viewModel.errorMessageSignIn,
+                    selector: (context, viewModel) =>
+                        viewModel.errorMessageSignIn,
                     builder: (context, errorMessage, child) {
                       return errorMessage.isNotEmpty
                           ? Center(
@@ -94,12 +96,16 @@ class SignInTab extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               final authViewModel = context.read<AuthViewModel>();
               String email = emailController.text.trim();
               String password = passwordController.text.trim();
+              await authViewModel.signInWithEmailAndPassword(email, password);
 
-              authViewModel.signInWithEmailAndPassword(email, password);
+              if (context.mounted) {
+                final chatViewModel = context.read<ChatViewModel>();
+                chatViewModel.getUsage();
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4b85e9),

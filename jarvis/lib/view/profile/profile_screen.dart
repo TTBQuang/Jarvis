@@ -1,16 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/view/pricing/pricing_screen.dart';
 import 'package:jarvis/view/shared/token_display.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constant.dart';
 import '../../model/user.dart';
 import '../../view_model/auth_view_model.dart';
+import '../../view_model/chat_view_model.dart';
 import '../shared/app_logo_with_name.dart';
 import '../shared/my_scaffold.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen>
+    with WidgetsBindingObserver {
+  bool _hasNavigateLink = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _hasNavigateLink) {
+      _hasNavigateLink = false;
+      print('comeback');
+
+      final chatViewModel = context.read<ChatViewModel>();
+      chatViewModel.getUsage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +126,16 @@ class ProfileScreen extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) => const PricingScreen()),
-                      );
+                    onTap: () async {
+                      const url =
+                          'https://admin.dev.jarvis.cx/pricing/overview';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        _hasNavigateLink = true;
+                        await launchUrl(
+                          Uri.parse(url),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
                     },
                   ),
                   const Divider(),
@@ -116,9 +153,14 @@ class ProfileScreen extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       final authViewModel = context.read<AuthViewModel>();
-                      authViewModel.signOut();
+                      await authViewModel.signOut();
+
+                      if (context.mounted) {
+                        final chatViewModel = context.read<ChatViewModel>();
+                        chatViewModel.getUsage();
+                      }
                     },
                   ),
                 ],
