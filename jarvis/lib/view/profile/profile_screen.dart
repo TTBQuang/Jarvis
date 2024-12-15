@@ -34,13 +34,17 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed && _hasNavigateLink) {
       _hasNavigateLink = false;
-      print('comeback');
 
-      final chatViewModel = context.read<ChatViewModel>();
-      chatViewModel.getUsage();
+      final authViewModel = context.read<AuthViewModel>();
+      await authViewModel.signOut();
+
+      if (mounted) {
+        final chatViewModel = context.read<ChatViewModel>();
+        chatViewModel.getUsage();
+      }
     }
   }
 

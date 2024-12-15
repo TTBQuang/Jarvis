@@ -22,9 +22,11 @@ class PromptViewModel extends ChangeNotifier {
 
   PromptList? publicPromptList;
   String errorMessagePublicTab = '';
+  bool isPublicPromptListLoading = false;
 
   PromptList? privatePromptList;
   String errorMessagePrivateTab = '';
+  bool isPrivatePromptListLoading = false;
 
   PromptType currentType = PromptType.private;
 
@@ -36,6 +38,9 @@ class PromptViewModel extends ChangeNotifier {
     bool? isFavorite,
   }) async {
     try {
+      isPublicPromptListLoading = true;
+      notifyListeners();
+
       PromptList newPromptList = await promptRepository.fetchPrompts(
         user: authViewModel.user,
         query: query,
@@ -60,7 +65,7 @@ class PromptViewModel extends ChangeNotifier {
       }
 
       errorMessagePublicTab = '';
-
+      isPublicPromptListLoading = false;
       notifyListeners();
     } catch (e) {
       print(e.toString());
@@ -81,6 +86,7 @@ class PromptViewModel extends ChangeNotifier {
         }
       } else {
         errorMessagePublicTab = 'Failed to fetch prompts';
+        isPublicPromptListLoading = false;
         notifyListeners();
       }
     }
@@ -94,6 +100,9 @@ class PromptViewModel extends ChangeNotifier {
     bool? isFavorite,
   }) async {
     try {
+      isPrivatePromptListLoading = true;
+      notifyListeners();
+
       PromptList newPromptList = await promptRepository.fetchPrompts(
         user: authViewModel.user,
         query: query,
@@ -118,6 +127,7 @@ class PromptViewModel extends ChangeNotifier {
       }
 
       errorMessagePrivateTab = '';
+      isPrivatePromptListLoading = false;
       notifyListeners();
     } catch (e) {
       print(e.toString());
@@ -137,6 +147,7 @@ class PromptViewModel extends ChangeNotifier {
               isFavorite: isFavorite);
         }
       } else {
+        isPrivatePromptListLoading = false;
         errorMessagePrivateTab = 'Failed to fetch prompts';
         notifyListeners();
       }

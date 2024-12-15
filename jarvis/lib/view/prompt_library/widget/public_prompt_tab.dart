@@ -58,7 +58,7 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
 
   @override
   void dispose() {
-    _debounceTimer.cancel(); // Hủy timer khi dispose
+    _debounceTimer.cancel();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -101,7 +101,7 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
 
         var promptList = viewModel.publicPromptList;
 
-        if (promptList == null) {
+        if (viewModel.isPublicPromptListLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -212,9 +212,9 @@ class _PublicPromptTabState extends State<PublicPromptTab> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: promptList.items.length,
+                itemCount: promptList?.items.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return PublicPromptItem(prompt: promptList.items[index]);
+                  return PublicPromptItem(prompt: promptList!.items[index]);
                 },
               ),
             ),

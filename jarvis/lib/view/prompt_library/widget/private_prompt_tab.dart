@@ -71,7 +71,6 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
   Widget build(BuildContext context) {
     return Consumer<PromptViewModel>(
       builder: (context, viewModel, child) {
-        // Kiểm tra thông báo lỗi từ viewModel
         if (viewModel.errorMessagePrivateTab.isNotEmpty) {
           return Center(
             child: Column(
@@ -93,15 +92,12 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
           );
         }
 
-        // Lấy danh sách private prompts từ viewModel
         var privatePromptList = viewModel.privatePromptList;
 
-        // Nếu chưa có dữ liệu (chưa load hoặc lỗi khác ngoài errorMessage)
-        if (privatePromptList == null) {
+        if (viewModel.isPrivatePromptListLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Nếu không có lỗi và dữ liệu đã tải thành công, hiển thị danh sách prompts
         return Column(
           children: [
             TextField(
@@ -119,12 +115,10 @@ class _PrivatePromptTabState extends State<PrivatePromptTab> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                // Thêm ScrollController
-                itemCount: privatePromptList.items.length,
-                // Sử dụng length của danh sách privatePromptList
+                itemCount: privatePromptList?.items.length,
                 itemBuilder: (context, index) {
                   return PrivatePromptItem(
-                      prompt: privatePromptList.items[index]);
+                      prompt: privatePromptList!.items[index]);
                 },
               ),
             ),
