@@ -22,6 +22,11 @@ class ChatViewModel extends ChangeNotifier {
   bool isLoading = false;
   bool isSending = false;
 
+  void setToken(int token) {
+    this.token = token;
+    notifyListeners();
+  }
+
   Future<void> getConversations({
     String? cursor,
     int? limit,
@@ -118,8 +123,9 @@ class ChatViewModel extends ChangeNotifier {
 
   void getUsage() async {
     try {
-      Subscription subscription = await chatRepository.getUsage(authViewModel.user);
-      if (subscription.name == SubscriptionType.basic){
+      Subscription subscription =
+          await chatRepository.getUsage(authViewModel.user);
+      if (subscription.name == SubscriptionType.basic) {
         token = subscription.dailyTokens;
       } else {
         token = -1;

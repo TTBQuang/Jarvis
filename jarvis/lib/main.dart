@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -13,6 +12,7 @@ import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
 import 'package:jarvis/view_model/knowledge_view_model.dart';
 import 'package:jarvis/view_model/pricing_view_model.dart';
+import 'package:jarvis/view_model/email_view_model.dart';
 import 'package:jarvis/view_model/prompt_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -57,6 +57,13 @@ Future<void> main() async {
             )..fetchKnowledgeList();
           },
         ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return EmailViewModel(
+                authViewModel: context.read<AuthViewModel>(),
+                chatViewModel: context.read<ChatViewModel>());
+          },
+        )
       ],
       child: const MyApp(),
     ),

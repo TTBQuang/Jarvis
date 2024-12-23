@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/view/email/widget/chat_bottom_bar.dart';
+import 'package:jarvis/view/email/widget/home_top_app_bar.dart';
+import 'package:jarvis/view/email/widget/messages_list.dart';
+import 'package:jarvis/view/email/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/email/widget/quick_reply_chips.dart';
-import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
-import 'package:jarvis/view/home/widget/home_top_app_bar.dart';
-import 'package:jarvis/view/home/widget/messages_list.dart';
-import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
-import 'package:jarvis/view/prompt_library/prompt_library_bottom_sheet.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
 
 import '../../constant.dart';
