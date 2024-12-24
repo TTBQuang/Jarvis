@@ -3,46 +3,69 @@ import 'package:provider/provider.dart';
 
 import '../../../view_model/knowledge_view_model.dart';
 
-class UploadSlackDialog extends StatelessWidget {
+class UploadSlackDialog extends StatefulWidget {
   final Function(String name, String workspace, String token) onUpload;
 
   const UploadSlackDialog({super.key, required this.onUpload});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController workspaceController = TextEditingController();
-    final TextEditingController tokenController = TextEditingController();
+  State<UploadSlackDialog> createState() => _UploadSlackDialogState();
+}
 
+class _UploadSlackDialogState extends State<UploadSlackDialog> {
+  late TextEditingController nameController;
+  late TextEditingController workspaceController;
+  late TextEditingController tokenController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    workspaceController = TextEditingController();
+    tokenController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    workspaceController.dispose();
+    tokenController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Upload data from Slack'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: workspaceController,
-            decoration: const InputDecoration(
-              labelText: 'Slack Workspace',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              controller: workspaceController,
+              decoration: const InputDecoration(
+                labelText: 'Slack Workspace',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: tokenController,
-            decoration: const InputDecoration(
-              labelText: 'Slack Bot Token',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              controller: tokenController,
+              decoration: const InputDecoration(
+                labelText: 'Slack Bot Token',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -67,7 +90,7 @@ class UploadSlackDialog extends StatelessWidget {
                 final name = nameController.text;
                 final workspace = workspaceController.text;
                 final token = tokenController.text;
-                await onUpload(name, workspace, token);
+                await widget.onUpload(name, workspace, token);
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }

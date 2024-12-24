@@ -189,10 +189,6 @@ class _KnowledgeDetailScreenState extends State<KnowledgeDetailScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {},
-                          ),
                           onTap: () {},
                         );
                       },

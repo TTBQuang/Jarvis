@@ -3,55 +3,80 @@ import 'package:provider/provider.dart';
 
 import '../../../view_model/knowledge_view_model.dart';
 
-class UploadConfluenceDialog extends StatelessWidget {
+class UploadConfluenceDialog extends StatefulWidget {
   final Function(String name, String wikiPageUrl, String username, String accessToken) onUpload;
 
   const UploadConfluenceDialog({super.key, required this.onUpload});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController wikiPageUrlController = TextEditingController();
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController accessTokenController = TextEditingController();
+  State<UploadConfluenceDialog> createState() => _UploadConfluenceDialogState();
+}
 
+class _UploadConfluenceDialogState extends State<UploadConfluenceDialog> {
+  late TextEditingController nameController;
+  late TextEditingController wikiPageUrlController;
+  late TextEditingController usernameController;
+  late TextEditingController accessTokenController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    wikiPageUrlController = TextEditingController();
+    usernameController = TextEditingController();
+    accessTokenController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    wikiPageUrlController.dispose();
+    usernameController.dispose();
+    accessTokenController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Upload data from Confluence'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: wikiPageUrlController,
-            decoration: const InputDecoration(
-              labelText: 'Wiki Page URL',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              controller: wikiPageUrlController,
+              decoration: const InputDecoration(
+                labelText: 'Wiki Page URL',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: usernameController,
-            decoration: const InputDecoration(
-              labelText: 'Confluence Username',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              controller: usernameController,
+              decoration: const InputDecoration(
+                labelText: 'Confluence Username',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: accessTokenController,
-            decoration: const InputDecoration(
-              labelText: 'Confluence Access Token',
-              border: OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              controller: accessTokenController,
+              decoration: const InputDecoration(
+                labelText: 'Confluence Access Token',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -77,7 +102,7 @@ class UploadConfluenceDialog extends StatelessWidget {
                 final wikiPageUrl = wikiPageUrlController.text;
                 final username = usernameController.text;
                 final accessToken = accessTokenController.text;
-                await onUpload(name, wikiPageUrl, username, accessToken);
+                await widget.onUpload(name, wikiPageUrl, username, accessToken);
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
