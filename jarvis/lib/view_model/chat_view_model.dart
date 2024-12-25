@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/chat.dart';
 import 'package:jarvis/model/subscription.dart';
@@ -21,6 +24,12 @@ class ChatViewModel extends ChangeNotifier {
   int token = 10;
   bool isLoading = false;
   bool isSending = false;
+  File? image;
+
+  void setImage(File? image) {
+    this.image = image;
+    notifyListeners();
+  }
 
   void setToken(int token) {
     this.token = token;
@@ -66,9 +75,9 @@ class ChatViewModel extends ChangeNotifier {
       if (conversationId == null) {
         CreateConversationResponse createConversationResponse =
             await chatRepository.createConversation(
-          content: message,
-          assistantId: assistantId,
-        );
+                content: message,
+                assistantId: assistantId,
+                files: image != null ? await getBase64Strings([image!]) : null);
 
         token = createConversationResponse.remainingUsage;
         conversationId = createConversationResponse.conversationId;
@@ -86,7 +95,8 @@ class ChatViewModel extends ChangeNotifier {
                 conversationMessages: conversationMessages,
                 conversationId: conversationId,
                 content: message,
-                assistantId: assistantId);
+                assistantId: assistantId,
+                files: image != null ? await getBase64Strings([image!]) : null);
 
         token = sendMessageResponse.remainingUsage;
         getConversation(
@@ -135,4 +145,14 @@ class ChatViewModel extends ChangeNotifier {
       print(e);
     }
   }
+}
+
+Future<List<String>> getBase64Strings(List<File> files) async {
+  List<String> base64Strings = [];
+  for (var file in files) {
+    List<int> fileBytes = await file.readAsBytes();
+    String base64String = base64Encode(fileBytes);
+    base64Strings.add(base64String);
+  }
+  return base64Strings;
 }

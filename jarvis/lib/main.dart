@@ -8,6 +8,7 @@ import 'package:jarvis/repository/pricing_repository.dart';
 import 'package:jarvis/repository/prompt_repository.dart';
 import 'package:jarvis/view/home/home_screen.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
+import 'package:jarvis/view_model/bot_view_model.dart';
 import 'package:jarvis/view_model/chat_view_model.dart';
 import 'package:jarvis/view_model/drawer_view_model.dart';
 import 'package:jarvis/view_model/knowledge_view_model.dart';
@@ -63,7 +64,12 @@ Future<void> main() async {
                 authViewModel: context.read<AuthViewModel>(),
                 chatViewModel: context.read<ChatViewModel>());
           },
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return BotViewModel(authViewModel: authViewModel);
+          },
+        ),
       ],
       child: const MyApp(),
     ),

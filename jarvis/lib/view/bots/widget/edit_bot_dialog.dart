@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view_model/bot_view_model.dart';
 import 'package:provider/provider.dart';
 
-class CreateBotDialog extends StatefulWidget {
-  const CreateBotDialog({super.key});
+class EditBotDialog extends StatefulWidget {
+  const EditBotDialog({super.key, required this.bot});
+
+  final BotData bot;
 
   @override
-  State<CreateBotDialog> createState() => _CreateBotDialogState();
+  State<EditBotDialog> createState() => _EditBotDialogState();
 }
 
-class _CreateBotDialogState extends State<CreateBotDialog> {
+class _EditBotDialogState extends State<EditBotDialog> {
   @override
   Widget build(BuildContext context) {
     final botViewModel = Provider.of<BotViewModel>(context);
     final TextEditingController nameController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
+    final TextEditingController promptController = TextEditingController();
+
+    nameController.text = widget.bot.assistantName;
+    descriptionController.text = widget.bot.description;
+    promptController.text = widget.bot.instructions;
 
     return SingleChildScrollView(
       child: AlertDialog(
-        title: const Text('Create New Bot'),
+        title: const Text('Update Assistant'),
         content: Form(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -27,18 +35,26 @@ class _CreateBotDialogState extends State<CreateBotDialog> {
               const SizedBox(height: 10),
               FTextField(
                 controller: nameController,
-                label: const Text('Bot Name'),
-                hint: 'Enter bot name',
+                label: const Text('Assistant Name'),
+                hint: 'Enter assistant name',
                 maxLines: 1,
                 maxLength: 50,
               ),
               const SizedBox(height: 10),
               FTextField.multiline(
                 controller: descriptionController,
-                label: const Text('Bot Description'),
-                hint: 'Enter bot description',
+                label: const Text('Assistant Description'),
+                hint: 'Enter assistant description',
                 maxLines: 4,
                 maxLength: 2000,
+              ),
+              const SizedBox(height: 10),
+              FTextField(
+                controller: promptController,
+                label: const Text('Persona & Prompt'),
+                hint: 'Enter prompt',
+                maxLines: 1,
+                maxLength: 50,
               ),
               const SizedBox(height: 10),
             ],
@@ -56,9 +72,11 @@ class _CreateBotDialogState extends State<CreateBotDialog> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await botViewModel.createBot(
+              await botViewModel.updateBot(
+                  assistantId: widget.bot.id,
                   name: nameController.text,
-                  description: descriptionController.text);
+                  description: descriptionController.text,
+                  instructions: promptController.text);
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(

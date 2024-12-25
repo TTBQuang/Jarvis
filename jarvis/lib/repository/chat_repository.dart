@@ -79,6 +79,7 @@ class ChatRepository {
     AssistantId? assistantId,
     List<ConversationMessage>? conversationMessages,
     String? conversationId,
+    List<String>? files,
   }) async {
     try {
       final response =
@@ -88,6 +89,7 @@ class ChatRepository {
         'metadata': {
           "conversation": {"id": conversationId, "messages": []}
         },
+        if (files != null) 'files': files
       });
       return SendMessageResponse.fromJson(response.data);
     } catch (e) {
@@ -98,13 +100,16 @@ class ChatRepository {
   Future<Subscription> getUsage(User user) async {
     try {
       var headers = {
-        'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null ? user.userUuid : '',
+        'x-jarvis-guid': user.userToken?.tokenJarvis.accessToken == null
+            ? user.userUuid
+            : '',
         'Authorization': user.userToken?.tokenJarvis.accessToken == null
             ? ''
             : 'Bearer ${user.userToken?.tokenJarvis.accessToken}',
       };
       print(headers);
-      var request = http.Request('GET', Uri.parse('$baseUrlJarvis/api/v1/subscriptions/me'));
+      var request = http.Request(
+          'GET', Uri.parse('$baseUrlJarvis/api/v1/subscriptions/me'));
 
       request.headers.addAll(headers);
 

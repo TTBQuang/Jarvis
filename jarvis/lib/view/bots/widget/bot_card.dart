@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view/bots/bot_detail_screen.dart';
+import 'package:jarvis/view/bots/widget/edit_bot_dialog.dart';
+import 'package:jarvis/view_model/bot_view_model.dart';
+import 'package:provider/provider.dart';
 
 class BotCard extends StatelessWidget {
   const BotCard({super.key, required this.bot});
 
-  final Bot bot;
+  final BotData bot;
 
   @override
   Widget build(BuildContext context) {
+    final botViewModel = Provider.of<BotViewModel>(context);
+
     return GestureDetector(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 100),
@@ -22,7 +27,7 @@ class BotCard extends StatelessWidget {
             child: FIcon(FAssets.icons.bot),
           ),
           title: Text(
-            bot.name,
+            bot.assistantName,
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Row(
@@ -31,7 +36,7 @@ class BotCard extends StatelessWidget {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  bot.createdAt,
+                  bot.createdAt.split('T')[0],
                   overflow: TextOverflow.ellipsis,
                 ),
               )
@@ -47,9 +52,18 @@ class BotCard extends StatelessWidget {
                 },
               ),
               IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () => showAdaptiveDialog(
+                  context: context,
+                  builder: (context) => EditBotDialog(
+                    bot: bot,
+                  ),
+                ),
+              ),
+              IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  // Handle delete action
+                  botViewModel.deleteBot(assistantId: bot.id);
                 },
               ),
             ],

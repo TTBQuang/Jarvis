@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/bot.dart';
-import 'package:jarvis/view/bots/widget/add_knowledge_dialog.dart';
 import 'package:jarvis/view/bots/widget/knowledge_list_dialog.dart';
 import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/home/widget/messages_list.dart';
@@ -10,12 +9,29 @@ import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/shared/app_logo_with_name.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
 import 'package:jarvis/view/shared/token_display.dart';
+import 'package:jarvis/view_model/bot_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class BotDetailScreen extends StatelessWidget {
+class BotDetailScreen extends StatefulWidget {
   const BotDetailScreen({super.key, required this.bot});
 
-  final Bot bot;
+  final BotData bot;
+
+  @override
+  State<BotDetailScreen> createState() => _BotDetailScreenState();
+}
+
+class _BotDetailScreenState extends State<BotDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final botViewModel = context.read<BotViewModel>();
+      botViewModel.getImportedKnowledge(assistantId: widget.bot.id);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +105,9 @@ class BotDetailScreen extends StatelessWidget {
                         label: const Text('Knowledge List'),
                         onPress: () => showAdaptiveDialog(
                           context: context,
-                          builder: (context) => KnowledgeListDialog(),
+                          builder: (context) => KnowledgeListDialog(
+                            bot: widget.bot,
+                          ),
                         ),
                       ),
                     ),

@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/constant.dart';
-import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view/bots/widget/bot_card.dart';
 import 'package:jarvis/view/bots/widget/create_bot_dialog.dart';
+import 'package:jarvis/view_model/bot_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-List<Bot> bots = [
-  Bot(
-    name: "INV001",
-    createdAt: "10/22/2024",
-    isFavorite: true,
-  ),
-  Bot(
-    name: "INV004",
-    createdAt: "10/22/2024",
-    isFavorite: false,
-  ),
-  Bot(
-    name: "INV005",
-    createdAt: "10/22/2024",
-    isFavorite: false,
-  ),
-];
 
 final botTypes = {
   'all': 'All',
@@ -30,11 +13,32 @@ final botTypes = {
   'myFavorite': 'My Favorite',
 };
 
-class BotsScreen extends StatelessWidget {
+class BotsScreen extends StatefulWidget {
   const BotsScreen({super.key});
 
   @override
+  State<BotsScreen> createState() => _BotsScreenState();
+}
+
+class _BotsScreenState extends State<BotsScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final botViewModel = context.read<BotViewModel>();
+      botViewModel.getBots();
+    });
+  }
+
+  String type = 'all';
+  String query = '';
+
+  @override
   Widget build(BuildContext context) {
+    final botViewModel = Provider.of<BotViewModel>(context);
+    final bots = botViewModel.bots;
+
     return Expanded(
       child: LayoutBuilder(builder: (context, constraints) {
         bool isLargeScreen = constraints.maxWidth > drawerDisplayWidthThreshold;
@@ -62,17 +66,37 @@ class BotsScreen extends StatelessWidget {
                               ShadOption(value: e.key, child: Text(e.value))),
                           selectedOptionBuilder: (context, value) =>
                               Text(botTypes[value]!),
-                          onChanged: print,
+                          onChanged: (value) => {
+                            setState(() {
+                              type = value;
+                            }),
+                            botViewModel.getBots(
+                              isPublished: type == 'published',
+                              isFavorite: type == 'myFavorite',
+                              q: query,
+                            )
+                          },
                         ),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: SizedBox(
                         width: 200,
                         child: FTextField(
                           hint: 'Search',
                           maxLines: 1,
+                          initialValue: query,
+                          onChange: (value) => {
+                            setState(() {
+                              query = value;
+                            }),
+                            botViewModel.getBots(
+                              q: value,
+                              isFavorite: type == 'myFavorite',
+                              isPublished: type == 'published',
+                            )
+                          },
                         ),
                       ),
                     ),
@@ -94,20 +118,22 @@ class BotsScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: Center(
-                child: GridView.count(
-                  crossAxisCount: MediaQuery.sizeOf(context).width >
-                      drawerDisplayWidthThreshold
-                      ? 2
-                      : 1,
-                  padding: const EdgeInsets.all(8.0),
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
-                  childAspectRatio: 3 / 1,
-                  children: List.generate(
-                      bots.length, (index) => BotCard(bot: bots[index])),
-                ),
-              ),
+              child: botViewModel.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Center(
+                      child: GridView.count(
+                        crossAxisCount: MediaQuery.sizeOf(context).width >
+                                drawerDisplayWidthThreshold
+                            ? 2
+                            : 1,
+                        padding: const EdgeInsets.all(8.0),
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 3 / 1,
+                        children: List.generate(
+                            bots.length, (index) => BotCard(bot: bots[index])),
+                      ),
+                    ),
             ),
           ],
         );
