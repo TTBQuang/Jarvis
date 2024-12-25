@@ -20,7 +20,7 @@ class ChatViewModel extends ChangeNotifier {
   List<Conversation>? conversations = [];
   String? conversationId;
   List<ConversationMessage>? conversationMessages = [];
-  AssistantId? assistantId = AssistantId.gpt_4o_mini;
+  String? assistantId = "gpt-4o-mini";
   int token = 10;
   bool isLoading = false;
   bool isSending = false;
@@ -57,7 +57,7 @@ class ChatViewModel extends ChangeNotifier {
   }
 
   Future<void> getConversation(
-      {required String conversationId, AssistantId? assistantId}) async {
+      {required String conversationId, String? assistantId}) async {
     try {
       GetConversationResponse conversationResponse =
           await chatRepository.getConversation(
@@ -112,7 +112,7 @@ class ChatViewModel extends ChangeNotifier {
     }
   }
 
-  void changeAssistant(AssistantId assistantId) {
+  void changeAssistant(String assistantId) {
     this.assistantId = assistantId;
     notifyListeners();
   }

@@ -43,7 +43,7 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF303f52)
                       : const Color(0xFFdce3f3),
-                  child: DropdownButton<AssistantId>(
+                  child: DropdownButton<String>(
                     borderRadius: BorderRadius.circular(20),
                     isExpanded: true,
                     value: assistantId,
@@ -53,19 +53,19 @@ class HomeTopAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ? const Color.fromARGB(255, 13, 21, 31)
                             : const Color(0xFFdce3f3),
                     menuMaxHeight: 300,
-                    items: AssistantId.values
-                        .map((item) => DropdownMenuItem<AssistantId>(
-                              value: item,
+                    items: assistantList
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item.id,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Text(
-                                  item!.name,
+                                  item.name,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ))
                         .toList(),
-                    onChanged: (AssistantId? newAssistantId) {
+                    onChanged: (String? newAssistantId) {
                       emailViewModel.changeAssistant(newAssistantId!);
                     },
                   ),

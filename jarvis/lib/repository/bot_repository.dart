@@ -10,6 +10,84 @@ class BotRepository {
     kbClient = KBClient(authViewModel: authViewModel);
   }
 
+  Future<void> createNewThread({required String assistantId}) async {
+    try {
+      await kbClient.dio
+          .post('/kb-core/v1/ai-assistant/thread/playground', data: {
+        'assistantId': assistantId,
+      });
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<GetThreadResponse> createThread(
+      {required String assistantId, String? message}) async {
+    try {
+      final response =
+          await kbClient.dio.post('/kb-core/v1/ai-assistant/thread', data: {
+        'firstMessage': message,
+        'assistantId': assistantId,
+      });
+
+      return GetThreadResponse.fromJson(response.data);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> sendThreadMessage(
+      {required String message,
+      required String assistantId,
+      required String openAiThreadId}) async {
+    try {
+      final response = await kbClient.dio
+          .post('/kb-core/v1/ai-assistant/$assistantId/ask', data: {
+        'message': message,
+        'openAiThreadId': openAiThreadId,
+        'instructions': '',
+      });
+
+      return response.data;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<ThreadMessage>> getThreadMessages({
+    required String openAiThreadId,
+  }) async {
+    try {
+      final response = await kbClient.dio
+          .get('/kb-core/v1/ai-assistant/thread/$openAiThreadId/messages');
+
+      // Check if response.data is a List
+      if (response.data is List) {
+        // Ensure each item in the list is a Map<String, dynamic>
+        return (response.data as List)
+            .map((json) =>
+                ThreadMessage.fromJson(Map<String, dynamic>.from(json)))
+            .toList();
+      } else {
+        throw Exception(
+            'Expected response.data to be a List, but got: ${response.data.runtimeType}');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<GetThreadResponse?> getThread({required String assistantId}) async {
+    try {
+      final response = await kbClient.dio
+          .get('/kb-core/v1/ai-assistant/$assistantId/threads');
+
+      return GetThreadResponse.fromGetThreadsJson(response.data);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> createBot({
     required String name,
     String? description,

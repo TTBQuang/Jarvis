@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:jarvis/constant.dart';
 import 'package:jarvis/model/bot.dart';
+import 'package:jarvis/view/bots/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/bots/widget/knowledge_list_dialog.dart';
-import 'package:jarvis/view/home/widget/chat_bottom_bar.dart';
-import 'package:jarvis/view/home/widget/messages_list.dart';
+import 'package:jarvis/view/bots/widget/messages_list.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/shared/app_logo_with_name.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
@@ -30,6 +30,7 @@ class _BotDetailScreenState extends State<BotDetailScreen> {
     Future.microtask(() {
       final botViewModel = context.read<BotViewModel>();
       botViewModel.getImportedKnowledge(assistantId: widget.bot.id);
+      botViewModel.getThread(assistantId: widget.bot.id);
     });
   }
 
@@ -118,12 +119,9 @@ class _BotDetailScreenState extends State<BotDetailScreen> {
                       child: MessagesList(isLargeScreen: isLargeScreen),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ChatBottomBar(
-                      onAddIconBtnClicked: (context) =>
-                          _showOptionsBottomSheet(context),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ChatBottomBar(),
                   ),
                 ],
               ),

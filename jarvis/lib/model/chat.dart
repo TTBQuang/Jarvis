@@ -139,26 +139,24 @@ class GetConversationResponse {
   }
 }
 
-enum AssistantId {
-  gpt_4o_mini('gpt-4o-mini', 'GPT-4o mini'),
-  gpt_4o('gpt-4o', 'GPT-4o'),
-  gemini_pro('gemini-1.5-pro-latest', 'Gemini 1.5 Pro'),
-  gemini_flash('gemini-1.5-flash-latest', 'Gemini 1.5 Flash'),
-  claude_haiku('claude-3-haiku-20240307', 'Claude 3 Haiku'),
-  claude_sonnet('claude-3-5-sonnet-20240620', 'Claude 3.5 Sonnet');
+class Assistant {
+  String id;
+  String name;
 
-  final String value;
-  final String name;
-
-  const AssistantId(this.value, this.name);
-
-  static AssistantId fromValue(String value) {
-    return AssistantId.values.firstWhere(
-      (assistantId) => assistantId.value == value,
-      orElse: () => AssistantId.gpt_4o_mini,
-    );
-  }
+  Assistant({
+    required this.id,
+    required this.name,
+  });
 }
+
+var assistantList = [
+  Assistant(id: 'gpt-4o-mini', name: 'GPT-4o mini'),
+  Assistant(id: 'gpt-4o', name: 'GPT-4o'),
+  Assistant(id: 'gemini-1.5-pro-latest', name: 'Gemini 1.5 Pro'),
+  Assistant(id: 'gemini-1.5-flash-latest', name: 'Gemini 1.5 Flash'),
+  Assistant(id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku'),
+  Assistant(id: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet'),
+];
 
 class SendMessageResponse {
   String message;

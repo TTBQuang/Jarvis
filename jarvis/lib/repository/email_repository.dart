@@ -14,7 +14,7 @@ class EmailRepository {
   Future<SendEmailResponse> sendMessage({
     required String email,
     required String mainIdea,
-    AssistantId? assistantId,
+    String? assistantId,
     List<ConversationMessage>? conversationMessages,
     String? conversationId,
   }) async {
@@ -22,7 +22,7 @@ class EmailRepository {
       final response = await dioClient.dio.post('/api/v1/ai-email', data: {
         'email': email,
         'mainIdea': mainIdea,
-        'assistant': {"id": assistantId?.value, "model": 'dify'},
+        'assistant': {"id": assistantId, "model": 'dify'},
         'metadata': {
           "context": [],
           "subject": "",

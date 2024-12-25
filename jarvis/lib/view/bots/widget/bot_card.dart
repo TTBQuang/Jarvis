@@ -71,6 +71,7 @@ class BotCard extends StatelessWidget {
         ),
       ),
       onTap: () {
+        botViewModel.selecteBot(bot: bot);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => BotDetailScreen(bot: bot),

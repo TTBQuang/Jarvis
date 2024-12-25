@@ -38,6 +38,55 @@ class BotData {
   }
 }
 
+class GetThreadResponse {
+  String id;
+  String assistantId;
+  String openAiThreadId;
+
+  GetThreadResponse({
+    required this.id,
+    required this.assistantId,
+    required this.openAiThreadId,
+  });
+
+  factory GetThreadResponse.fromJson(Map<String, dynamic> json) {
+    return GetThreadResponse(
+      id: json['id'] ?? '',
+      assistantId: json['assistantId'] ?? '',
+      openAiThreadId: json['openAiThreadId'] ?? '',
+    );
+  }
+
+  factory GetThreadResponse.fromGetThreadsJson(Map<String, dynamic> json) {
+    if (json['data'].isEmpty) {
+      throw Exception('No threads found');
+    } else {
+      return GetThreadResponse.fromJson(json['data'][json['data'].length - 1]);
+    }
+  }
+
+  @override
+  String toString() =>
+      'GetThreadResponse(id: $id, assistantId: $assistantId, openAiThreadId: $openAiThreadId)';
+}
+
+class ThreadMessage {
+  String role;
+  String content;
+
+  ThreadMessage({
+    required this.role,
+    required this.content,
+  });
+
+  factory ThreadMessage.fromJson(Map<String, dynamic> json) {
+    return ThreadMessage(
+      role: json['role'] ?? '',
+      content: json['content'][0]['text']['value'] ?? '',
+    );
+  }
+}
+
 class GetBotsResponse {
   List<BotData> data;
 

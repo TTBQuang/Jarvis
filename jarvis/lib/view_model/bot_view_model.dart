@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:jarvis/model/bot.dart';
-import 'package:jarvis/model/chat.dart';
 import 'package:jarvis/model/knowledge.dart';
 import 'package:jarvis/repository/bot_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
@@ -21,6 +19,61 @@ class BotViewModel extends ChangeNotifier {
   bool isCreating = false;
   bool isLoading = false;
   List<Knowledge> importedKnowledge = [];
+  GetThreadResponse? thread;
+  List<ThreadMessage> conversationMessages = [];
+  bool isSending = false;
+
+  Future<void> createNewThread() async {
+    try {
+      conversationMessages = [];
+      GetThreadResponse threadResponse =
+          await botRepository.createThread(assistantId: selectedBot!.id);
+      thread = threadResponse;
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  Future<void> sendThreadMessage({required String message}) async {
+    try {
+      isSending = true;
+      notifyListeners();
+      String messageResponse = await botRepository.sendThreadMessage(
+          message: message,
+          assistantId: selectedBot!.id,
+          openAiThreadId: thread!.openAiThreadId);
+
+      conversationMessages.add(ThreadMessage(
+        role: 'user',
+        content: message,
+      ));
+      conversationMessages
+          .add(ThreadMessage(role: 'assistant', content: messageResponse));
+    } catch (e) {
+      print(e);
+    } finally {
+      isSending = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getThread({required String assistantId}) async {
+    try {
+      GetThreadResponse? threadResponse =
+          await botRepository.getThread(assistantId: assistantId);
+      thread = threadResponse;
+      if (threadResponse != null) {
+        conversationMessages = await botRepository.getThreadMessages(
+            openAiThreadId: threadResponse.openAiThreadId);
+      } else {
+        GetThreadResponse threadResponse =
+            await botRepository.createThread(assistantId: selectedBot!.id);
+        thread = threadResponse;
+      }
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> createBot({required String name, String? description}) async {
     try {
@@ -69,6 +122,13 @@ class BotViewModel extends ChangeNotifier {
           id: botResponse.id,
           assistantName: botResponse.assistantName,
           createdAt: botResponse.createdAt);
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  Future<void> selecteBot({required BotData bot}) async {
+    try {
+      selectedBot = bot;
       notifyListeners();
     } catch (e) {}
   }

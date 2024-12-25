@@ -20,14 +20,14 @@ class ChatRepository {
   Future<GetConversationsResponse> getConversations({
     String? cursor,
     int? limit,
-    AssistantId? assistantId,
+    String? assistantId,
   }) async {
     try {
       final response = await dioClient.dio
           .get('/api/v1/ai-chat/conversations', queryParameters: {
         if (limit != null) 'limit': limit.toString(),
         if (cursor != null) 'cursor': cursor,
-        if (assistantId != null) 'assistantId': assistantId.value,
+        if (assistantId != null) 'assistantId': assistantId,
         'assistantModel': 'dify',
       });
       return GetConversationsResponse.fromJson(response.data);
@@ -38,13 +38,13 @@ class ChatRepository {
 
   Future<CreateConversationResponse> createConversation({
     required String content,
-    AssistantId? assistantId,
+    String? assistantId,
     List<String>? files,
   }) async {
     try {
       final response = await dioClient.dio.post('/api/v1/ai-chat', data: {
         'content': content,
-        'assistant': {"id": assistantId?.value, "model": 'dify'},
+        'assistant': {"id": assistantId, "model": 'dify'},
         if (files != null) 'files': files,
       });
       return CreateConversationResponse.fromJson(response.data);
@@ -57,7 +57,7 @@ class ChatRepository {
     required String conversationId,
     String? cursor,
     int? limit,
-    AssistantId? assistantId,
+    String? assistantId,
   }) async {
     try {
       final response = await dioClient.dio.get(
@@ -65,7 +65,7 @@ class ChatRepository {
           queryParameters: {
             if (limit != null) 'limit': limit.toString(),
             if (cursor != null) 'cursor': cursor,
-            if (assistantId != null) 'assistantId': assistantId.value,
+            if (assistantId != null) 'assistantId': assistantId,
             'assistantModel': 'dify',
           });
       return GetConversationResponse.fromJson(response.data);
@@ -76,7 +76,7 @@ class ChatRepository {
 
   Future<SendMessageResponse> sendMessage({
     required String content,
-    AssistantId? assistantId,
+    String? assistantId,
     List<ConversationMessage>? conversationMessages,
     String? conversationId,
     List<String>? files,
@@ -85,7 +85,7 @@ class ChatRepository {
       final response =
           await dioClient.dio.post('/api/v1/ai-chat/messages', data: {
         'content': content,
-        'assistant': {"id": assistantId?.value, "model": 'dify'},
+        'assistant': {"id": assistantId, "model": 'dify'},
         'metadata': {
           "conversation": {"id": conversationId, "messages": []}
         },

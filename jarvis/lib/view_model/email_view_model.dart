@@ -18,7 +18,7 @@ class EmailViewModel extends ChangeNotifier {
   }
 
   List<ConversationMessage>? conversationMessages = [];
-  AssistantId? assistantId = AssistantId.gpt_4o_mini;
+  String? assistantId = "gpt-4o-mini";
   bool isLoading = false;
   bool isSending = false;
   String email = ' ';
@@ -52,7 +52,7 @@ class EmailViewModel extends ChangeNotifier {
     }
   }
 
-  void changeAssistant(AssistantId assistantId) {
+  void changeAssistant(String assistantId) {
     this.assistantId = assistantId;
     notifyListeners();
   }
