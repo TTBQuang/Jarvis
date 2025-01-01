@@ -104,7 +104,6 @@ class _BotDetailScreenState extends State<BotDetailScreen> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 300,
                           child: FButton(
                             label: const Text('Knowledge List'),
                             onPress: () => showAdaptiveDialog(

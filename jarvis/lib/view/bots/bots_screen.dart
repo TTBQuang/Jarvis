@@ -10,7 +10,6 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 final botTypes = {
   'all': 'All',
   'published': 'Published',
-  'myFavorite': 'My Favorite',
 };
 
 class BotsScreen extends StatefulWidget {

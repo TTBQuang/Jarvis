@@ -46,12 +46,6 @@ class BotCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(Icons.star_border),
-                onPressed: () {
-                  // Handle favorite action
-                },
-              ),
-              IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () => showAdaptiveDialog(
                   context: context,
