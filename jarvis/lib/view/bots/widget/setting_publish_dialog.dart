@@ -16,15 +16,28 @@ class SettingPublishDialog extends StatefulWidget {
 }
 
 class _SettingPublishDialogState extends State<SettingPublishDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final botViewModel = Provider.of<BotViewModel>(context);
+  Map<String, TextEditingController> informationController = {};
 
-    Map<String, TextEditingController> informationController = {};
+  @override
+  void initState() {
+    super.initState();
 
     for (var information in widget.platform['information']) {
       informationController[information] = TextEditingController();
     }
+  }
+
+  @override
+  void dispose() {
+    for (var information in widget.platform['information']) {
+      informationController[information]?.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final botViewModel = Provider.of<BotViewModel>(context);
 
     return SingleChildScrollView(
       child: FDialog(

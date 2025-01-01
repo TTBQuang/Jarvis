@@ -15,6 +15,8 @@ class AddKnowledgeDialog extends StatefulWidget {
 }
 
 class _AddKnowledgeDialogState extends State<AddKnowledgeDialog> {
+  Map<String, bool> adding = {};
+
   @override
   Widget build(BuildContext context) {
     final botViewModel = Provider.of<BotViewModel>(context);
@@ -47,11 +49,23 @@ class _AddKnowledgeDialogState extends State<AddKnowledgeDialog> {
                       title: Text(knowledge.knowledgeName),
                       subtitle: Text(knowledge.description),
                       trailing: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => botViewModel.addKnowledge(
-                          assistantId: widget.bot.id,
-                          knowledgeId: knowledge.id,
-                        ),
+                        icon: adding[knowledge.id] == true
+                            ? const CircularProgressIndicator()
+                            : const Icon(Icons.add),
+                        onPressed: () async {
+                          setState(() {
+                            adding[knowledge.id] = true; // Start loading
+                          });
+
+                          await botViewModel.addKnowledge(
+                            assistantId: widget.bot.id,
+                            knowledgeId: knowledge.id,
+                          );
+
+                          setState(() {
+                            adding[knowledge.id] = false; // Stop loading
+                          });
+                        },
                       ),
                     );
                   },
