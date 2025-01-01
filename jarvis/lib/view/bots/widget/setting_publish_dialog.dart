@@ -31,78 +31,137 @@ class _SettingPublishDialogState extends State<SettingPublishDialog> {
         direction: Axis.horizontal,
         title: Text('Configure ${widget.platform['name']} Bot'),
         body: SizedBox(
-          height: 300,
+          height: 500,
           width: 300,
           child: Material(
             child: Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.grey[800]
-                                  : Colors.grey[300],
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(child: Text('1'))),
-                        Text('${widget.platform['name']} copylink')
-                      ],
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 100,
-                      child: ListView(
-                        children: widget.platform['copylink']
-                            .map<Widget>((copylink) => ListTile(
-                                  title: Text(copylink['name'] as String),
-                                  subtitle: copylink['link'] == 'knowledge'
-                                      ? SelectableText(
-                                          copylink['link'] as String)
-                                      : SelectableText(
-                                          (copylink['link'] as String) +
-                                              widget.bot.id),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.grey[800]
-                                  : Colors.grey[300],
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(child: Text('2'))),
-                        Text('${widget.platform['name']} information')
-                      ],
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 100,
-                      child: ListView(
-                        children: widget.platform['information']
-                            .map<Widget>((information) => ListTile(
-                                  title: Text(information as String),
-                                  subtitle: TextField(
-                                    controller:
-                                        informationController[information],
+                  children: widget.platform['copylink'].isEmpty
+                      ? [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.grey[800]
+                                        : Colors.grey[300],
+                                    shape: BoxShape.circle,
                                   ),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  ],
+                                  child: const Flex(
+                                      direction: Axis.horizontal,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text('1'),
+                                      ])),
+                              Text(' ${widget.platform['name']} information')
+                            ],
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 100,
+                            child: ListView(
+                              children: widget.platform['information']
+                                  .map<Widget>((information) => ListTile(
+                                        title: Text(information as String),
+                                        subtitle: TextField(
+                                          controller: informationController[
+                                              information],
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ]
+                      : [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.grey[800]
+                                      : Colors.grey[300],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Flex(
+                                    direction: Axis.horizontal,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text('1'),
+                                    ]),
+                              ),
+                              Text(' ${widget.platform['name']} copylink')
+                            ],
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 200,
+                            child: ListView(
+                              children: widget.platform['copylink']
+                                  .map<Widget>((copylink) => ListTile(
+                                        title: Text(copylink['name'] as String),
+                                        subtitle: copylink['link'] ==
+                                                'knowledge'
+                                            ? SelectableText(
+                                                copylink['link'] as String)
+                                            : SelectableText(
+                                                (copylink['link'] as String) +
+                                                    widget.bot.id),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.grey[800]
+                                        : Colors.grey[300],
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Flex(
+                                      direction: Axis.horizontal,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text('2'),
+                                      ])),
+                              Text(' ${widget.platform['name']} information')
+                            ],
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 200,
+                            child: ListView(
+                              children: widget.platform['information']
+                                  .map<Widget>((information) => ListTile(
+                                        title: Text(information as String),
+                                        subtitle: TextField(
+                                          controller: informationController[
+                                              information],
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ],
                 ),
               ),
             ),

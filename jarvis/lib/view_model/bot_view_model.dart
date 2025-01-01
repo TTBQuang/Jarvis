@@ -73,12 +73,14 @@ class BotViewModel extends ChangeNotifier {
           assistantId: selectedBot!.id,
           openAiThreadId: thread!.openAiThreadId);
 
-      conversationMessages.add(ThreadMessage(
-        role: 'user',
-        content: message,
-      ));
-      conversationMessages
-          .add(ThreadMessage(role: 'assistant', content: messageResponse));
+      conversationMessages.insert(
+          0,
+          ThreadMessage(
+            role: 'user',
+            content: message,
+          ));
+      conversationMessages.insert(
+          0, ThreadMessage(role: 'assistant', content: messageResponse));
     } catch (e) {
       print(e);
     } finally {

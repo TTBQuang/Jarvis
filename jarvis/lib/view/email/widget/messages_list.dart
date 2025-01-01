@@ -15,8 +15,9 @@ class MessagesList extends StatelessWidget {
     final messages = emailViewModel.conversationMessages ?? [];
 
     TextEditingController emailController = TextEditingController();
-    emailController.text =
-        emailViewModel.email == " " ? 'Enter your email' : emailViewModel.email;
+    if (emailViewModel.email != " ") {
+      emailController.text = emailViewModel.email;
+    }
     FocusNode emailFocusNode = FocusNode(); // Create a FocusNode
 
     // Add listener to update when focus is lost
