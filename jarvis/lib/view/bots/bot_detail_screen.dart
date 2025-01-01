@@ -5,6 +5,7 @@ import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view/bots/widget/chat_bottom_bar.dart';
 import 'package:jarvis/view/bots/widget/knowledge_list_dialog.dart';
 import 'package:jarvis/view/bots/widget/messages_list.dart';
+import 'package:jarvis/view/bots/widget/publish_dialog.dart';
 import 'package:jarvis/view/home/widget/options_bottom_sheet.dart';
 import 'package:jarvis/view/shared/app_logo_with_name.dart';
 import 'package:jarvis/view/shared/my_scaffold.dart';
@@ -100,17 +101,33 @@ class _BotDetailScreenState extends State<BotDetailScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 300,
-                      child: FButton(
-                        label: const Text('Knowledge List'),
-                        onPress: () => showAdaptiveDialog(
-                          context: context,
-                          builder: (context) => KnowledgeListDialog(
-                            bot: widget.bot,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 300,
+                          child: FButton(
+                            label: const Text('Knowledge List'),
+                            onPress: () => showAdaptiveDialog(
+                              context: context,
+                              builder: (context) => KnowledgeListDialog(
+                                bot: widget.bot,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        const Spacer(),
+                        SizedBox(
+                          child: FButton(
+                            label: const Text('Publish'),
+                            onPress: () => showAdaptiveDialog(
+                              context: context,
+                              builder: (context) => PublishDialog(
+                                bot: widget.bot,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(

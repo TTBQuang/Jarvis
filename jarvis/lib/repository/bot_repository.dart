@@ -1,6 +1,7 @@
 import 'package:jarvis/config/KBClient.dart';
 import 'package:jarvis/model/bot.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BotRepository {
   late KBClient kbClient;
@@ -8,6 +9,48 @@ class BotRepository {
 
   BotRepository({this.authViewModel}) {
     kbClient = KBClient(authViewModel: authViewModel);
+  }
+
+  Future<void> publishSlackBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    try {
+      final response = await kbClient.dio.post(
+          '/kb-core/v1/bot-integration/slack/publish/$assistantId',
+          data: data);
+
+      final Uri url = Uri.parse(response.data['redirect']);
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> publishTelegramBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    final response = await kbClient.dio.post(
+      '/kb-core/v1/bot-integration/telegram/publish/$assistantId',
+      data: data,
+    );
+
+    final Uri url = Uri.parse(response.data['redirect']);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  Future<void> publishMessengerBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    final response = await kbClient.dio.post(
+      '/kb-core/v1/bot-integration/messenger/publish/$assistantId',
+      data: data,
+    );
+
+    final Uri url = Uri.parse(response.data['redirect']);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Future<void> createNewThread({required String assistantId}) async {

@@ -20,7 +20,7 @@ class ChatViewModel extends ChangeNotifier {
   List<Conversation>? conversations = [];
   String? conversationId;
   List<ConversationMessage>? conversationMessages = [];
-  String? assistantId = "gpt-4o-mini";
+  String assistantId = "gpt-4o-mini";
   int token = 10;
   bool isLoading = false;
   bool isSending = false;
@@ -45,23 +45,25 @@ class ChatViewModel extends ChangeNotifier {
           await chatRepository.getConversations(
         cursor: cursor,
         limit: limit,
-        assistantId: assistantId,
+        assistantId: getAssistantId(assistantId),
       );
 
       conversations = conversationsResponse.items;
       conversationId = conversations?.first.id;
       getConversation(
-          conversationId: conversationId!, assistantId: assistantId);
+          conversationId: conversationId!,
+          assistantId: getAssistantId(assistantId));
       notifyListeners();
     } catch (e) {}
   }
 
   Future<void> getConversation(
-      {required String conversationId, String? assistantId}) async {
+      {required String conversationId, required String assistantId}) async {
     try {
       GetConversationResponse conversationResponse =
           await chatRepository.getConversation(
-              conversationId: conversationId, assistantId: assistantId);
+              conversationId: conversationId,
+              assistantId: getAssistantId(assistantId));
 
       conversationMessages = conversationResponse.items;
       notifyListeners();
@@ -76,7 +78,7 @@ class ChatViewModel extends ChangeNotifier {
         CreateConversationResponse createConversationResponse =
             await chatRepository.createConversation(
                 content: message,
-                assistantId: assistantId,
+                assistantId: getAssistantId(assistantId),
                 files: image != null ? await getBase64Strings([image!]) : null);
 
         token = createConversationResponse.remainingUsage;
@@ -88,19 +90,21 @@ class ChatViewModel extends ChangeNotifier {
                 title: message,
                 id: conversationId!));
         getConversation(
-            conversationId: conversationId!, assistantId: assistantId);
+            conversationId: conversationId!,
+            assistantId: getAssistantId(assistantId));
       } else {
         SendMessageResponse sendMessageResponse =
             await chatRepository.sendMessage(
                 conversationMessages: conversationMessages,
                 conversationId: conversationId,
                 content: message,
-                assistantId: assistantId,
+                assistantId: getAssistantId(assistantId),
                 files: image != null ? await getBase64Strings([image!]) : null);
 
         token = sendMessageResponse.remainingUsage;
         getConversation(
-            conversationId: conversationId!, assistantId: assistantId);
+            conversationId: conversationId!,
+            assistantId: getAssistantId(assistantId));
       }
 
       isSending = false;
@@ -123,7 +127,8 @@ class ChatViewModel extends ChangeNotifier {
     this.conversationId = conversationId;
     if (conversationId != null) {
       await getConversation(
-          conversationId: conversationId, assistantId: assistantId);
+          conversationId: conversationId,
+          assistantId: getAssistantId(assistantId));
     } else {
       conversationMessages = [];
     }
@@ -155,4 +160,12 @@ Future<List<String>> getBase64Strings(List<File> files) async {
     base64Strings.add(base64String);
   }
   return base64Strings;
+}
+
+String getAssistantId(String assistantId) {
+  if (assistantList.any((element) => element.id == assistantId)) {
+    return assistantId;
+  } else {
+    return assistantList.first.id;
+  }
 }

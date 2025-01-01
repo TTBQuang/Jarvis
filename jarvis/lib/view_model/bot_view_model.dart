@@ -23,6 +23,37 @@ class BotViewModel extends ChangeNotifier {
   List<ThreadMessage> conversationMessages = [];
   bool isSending = false;
 
+  Future<void> publishSlackBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    try {
+      await botRepository.publishSlackBot(assistantId: assistantId, data: {
+        'botToken': data['Token']!,
+        'clientId': data['Client ID']!,
+        'clientSecret': data['Client Secret']!,
+        'signingSecret': data['Signing Secret']!
+      });
+    } catch (e) {}
+  }
+
+  Future<void> publishTelegramBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    try {
+      await botRepository.publishTelegramBot(
+          assistantId: assistantId, data: {'botToken': data['Token']!});
+    } catch (e) {}
+  }
+
+  Future<void> publishMessengerBot(
+      {required String assistantId, required Map<String, String> data}) async {
+    try {
+      await botRepository.publishMessengerBot(assistantId: assistantId, data: {
+        'botToken': data['Messenger Bot Token']!,
+        'pageId': data['Messenger Bot Page ID']!,
+        'appSecret': data['Messenger Bot App Secret']!
+      });
+    } catch (e) {}
+  }
+
   Future<void> createNewThread() async {
     try {
       conversationMessages = [];
