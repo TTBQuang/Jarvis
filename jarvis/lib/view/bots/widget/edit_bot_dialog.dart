@@ -14,16 +14,29 @@ class EditBotDialog extends StatefulWidget {
 }
 
 class _EditBotDialogState extends State<EditBotDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final botViewModel = Provider.of<BotViewModel>(context);
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
-    final TextEditingController promptController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController promptController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
     nameController.text = widget.bot.assistantName;
     descriptionController.text = widget.bot.description;
     promptController.text = widget.bot.instructions;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    promptController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final botViewModel = Provider.of<BotViewModel>(context);
 
     return SingleChildScrollView(
       child: AlertDialog(
@@ -43,6 +56,7 @@ class _EditBotDialogState extends State<EditBotDialog> {
               const SizedBox(height: 10),
               FTextField.multiline(
                 controller: descriptionController,
+                onChange: (value) => descriptionController.text = value,
                 label: const Text('Assistant Description'),
                 hint: 'Enter assistant description',
                 maxLines: 4,
@@ -51,6 +65,7 @@ class _EditBotDialogState extends State<EditBotDialog> {
               const SizedBox(height: 10),
               FTextField(
                 controller: promptController,
+                onChange: (value) => promptController.text = value,
                 label: const Text('Persona & Prompt'),
                 hint: 'Enter prompt',
                 maxLines: 1,
