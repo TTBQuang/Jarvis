@@ -22,7 +22,7 @@ class _AddKnowledgeDialogState extends State<AddKnowledgeDialog> {
     final botViewModel = Provider.of<BotViewModel>(context);
     final knowledgeViewModel = Provider.of<KnowledgeViewModel>(context);
     final knowledges = (knowledgeViewModel.knowledgeList?.data ?? [])
-        .takeWhile((knowledge) =>
+        .where((knowledge) =>
             botViewModel.importedKnowledge.indexWhere(
                 (importedKnowledge) => importedKnowledge.id == knowledge.id) ==
             -1)
@@ -36,10 +36,6 @@ class _AddKnowledgeDialogState extends State<AddKnowledgeDialog> {
           width: 300,
           child: Column(
             children: [
-              const FTextField(
-                hint: 'Search',
-                maxLines: null,
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: knowledges.length,
