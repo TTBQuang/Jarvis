@@ -43,11 +43,11 @@ class _AuthScreenState extends State<AuthScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 10),
-                    const GoogleSignInButton(),
-                    const SizedBox(height: 15),
-                    const OrDivider(),
-                    const SizedBox(height: 15),
+                    //const SizedBox(height: 10),
+                    // const GoogleSignInButton(),
+                    // const SizedBox(height: 15),
+                    //const OrDivider(),
+                    //const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: AuthToggle(

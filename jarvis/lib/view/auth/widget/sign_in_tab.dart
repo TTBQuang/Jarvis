@@ -54,20 +54,20 @@ class SignInTab extends StatelessWidget {
             hintText: 'Enter your password',
           ),
         ),
-        const SizedBox(height: 10),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => const ForgotPasswordScreen(),
-                ),
-              );
-            },
-            child: const Text('Forgot Password?'),
-          ),
-        ),
+        // const SizedBox(height: 10),
+        // Align(
+        //   alignment: Alignment.centerRight,
+        //   child: TextButton(
+        //     onPressed: () {
+        //       Navigator.of(context).pushReplacement(
+        //         MaterialPageRoute(
+        //           builder: (context) => const ForgotPasswordScreen(),
+        //         ),
+        //       );
+        //     },
+        //     child: const Text('Forgot Password?'),
+        //   ),
+        // ),
         const SizedBox(height: 8),
         Selector<AuthViewModel, bool>(
           selector: (context, viewModel) => viewModel.isSigningIn,
