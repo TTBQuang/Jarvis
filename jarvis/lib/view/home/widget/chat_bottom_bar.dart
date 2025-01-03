@@ -90,55 +90,77 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
   Widget build(BuildContext context) {
     final chatViewModel = Provider.of<ChatViewModel>(context);
     final isSending = chatViewModel.isSending;
+    final image = chatViewModel.image;
 
-    return Row(
+    return Column(
       children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.grey[800]
-                : Colors.grey[300],
-            shape: BoxShape.circle,
-          ),
-          child: IconButton(
-            iconSize: 20,
-            icon: const Icon(Icons.add),
-            onPressed: () => widget.onAddIconBtnClicked(context),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextField(
-            controller: _textController,
-            decoration: InputDecoration(
-              hintText: 'Ask me anything, press \'/\' for prompts...',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
+        if (image != null)
+          SizedBox(
+              height: 100,
+              child: Row(
+                children: [
+                  Image.file(image),
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => chatViewModel.setImage(null),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[800]
+                    : Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                iconSize: 20,
+                icon: const Icon(Icons.add),
+                onPressed: () => widget.onAddIconBtnClicked(context),
               ),
             ),
-          ),
-        ),
-        isSending
-            ? const SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: Center(child: CircularProgressIndicator()),
-              )
-            : IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: _isTextEmpty
-                    ? null
-                    : () {
-                        chatViewModel.sendMessage(
-                            message: _textController.text);
-                        _textController.clear();
-                      },
-                color: _isTextEmpty ? Colors.grey : Colors.blue,
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                controller: _textController,
+                decoration: InputDecoration(
+                  hintText: 'Ask me anything, press \'/\' for prompts...',
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
+            ),
+            isSending
+                ? const SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: _isTextEmpty
+                        ? null
+                        : () {
+                            chatViewModel.sendMessage(
+                                message: _textController.text);
+                            _textController.clear();
+                          },
+                    color: _isTextEmpty ? Colors.grey : Colors.blue,
+                  ),
+          ],
+        ),
       ],
     );
   }

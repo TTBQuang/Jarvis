@@ -6,6 +6,7 @@ import 'package:jarvis/model/chat.dart';
 import 'package:jarvis/model/subscription.dart';
 import 'package:jarvis/repository/chat_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
+import 'package:screenshot/screenshot.dart';
 
 class ChatViewModel extends ChangeNotifier {
   final AuthViewModel authViewModel;
@@ -25,6 +26,7 @@ class ChatViewModel extends ChangeNotifier {
   bool isLoading = false;
   bool isSending = false;
   File? image;
+  final ScreenshotController screenshotController = ScreenshotController();
 
   void setImage(File? image) {
     this.image = image;
@@ -77,9 +79,9 @@ class ChatViewModel extends ChangeNotifier {
       if (conversationId == null) {
         CreateConversationResponse createConversationResponse =
             await chatRepository.createConversation(
-                content: message,
-                assistantId: getAssistantId(assistantId),
-                files: image != null ? await getBase64Strings([image!]) : null);
+          content: message,
+          assistantId: getAssistantId(assistantId),
+        );
 
         token = createConversationResponse.remainingUsage;
         conversationId = createConversationResponse.conversationId;
@@ -95,11 +97,11 @@ class ChatViewModel extends ChangeNotifier {
       } else {
         SendMessageResponse sendMessageResponse =
             await chatRepository.sendMessage(
-                conversationMessages: conversationMessages,
-                conversationId: conversationId,
-                content: message,
-                assistantId: getAssistantId(assistantId),
-                files: image != null ? await getBase64Strings([image!]) : null);
+          conversationMessages: conversationMessages,
+          conversationId: conversationId,
+          content: message,
+          assistantId: getAssistantId(assistantId),
+        );
 
         token = sendMessageResponse.remainingUsage;
         getConversation(
