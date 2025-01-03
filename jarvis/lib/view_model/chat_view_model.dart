@@ -6,7 +6,6 @@ import 'package:jarvis/model/chat.dart';
 import 'package:jarvis/model/subscription.dart';
 import 'package:jarvis/repository/chat_repository.dart';
 import 'package:jarvis/view_model/auth_view_model.dart';
-import 'package:screenshot/screenshot.dart';
 
 class ChatViewModel extends ChangeNotifier {
   final AuthViewModel authViewModel;
@@ -26,7 +25,6 @@ class ChatViewModel extends ChangeNotifier {
   bool isLoading = false;
   bool isSending = false;
   File? image;
-  final ScreenshotController screenshotController = ScreenshotController();
 
   void setImage(File? image) {
     this.image = image;

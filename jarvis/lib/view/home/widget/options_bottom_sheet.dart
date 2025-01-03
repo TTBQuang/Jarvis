@@ -47,32 +47,6 @@ class OptionsBottomSheet extends StatelessWidget {
               _pickImage(context, ImageSource.camera, chatViewModel);
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.screenshot),
-            title: const Text(
-              'Screenshot',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            onTap: () async {
-              final image = await chatViewModel.screenshotController.capture();
-
-              if (image != null) {
-                final directory = await getApplicationDocumentsDirectory();
-                final filePath =
-                    '${directory.path}/screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
-                final file = File(filePath);
-
-                // Write the image bytes to the file
-                await file.writeAsBytes(image);
-
-                chatViewModel.setImage(file);
-                Navigator.of(context).pop();
-              }
-            },
-          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.library_books),
