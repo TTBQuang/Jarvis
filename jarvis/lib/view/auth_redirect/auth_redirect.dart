@@ -25,8 +25,8 @@ class _AuthRedirectState extends State<AuthRedirect> {
     super.initState();
 
     _bannerAd = BannerAd(
-      // adUnitId: 'ca-app-pub-6340941336992938/5450417660', // prod
-      adUnitId: 'ca-app-pub-3940256099942544/9214589741', // test
+      adUnitId: 'ca-app-pub-6340941336992938/5450417660', // prod
+      // adUnitId: 'ca-app-pub-3940256099942544/9214589741', // test
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
